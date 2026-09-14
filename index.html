@@ -537,23 +537,23 @@
     <div class="kpis" id="ob-kpis"></div>
 
     <section class="panel">
-      <h2>Forecast vs. Objetivo</h2>
-      <div class="panel-sub">Cuánto se forecasteó para cada sucursal comparado con el objetivo anual de la compañía. Esto es planificación, todavía no refleja ventas reales — eso está en la sección de abajo.</div>
-      <div id="ob-chart"></div>
+      <h2>Avance real de ventas 2026</h2>
+      <div class="panel-sub">Lo efectivamente vendido a la fecha (facturado + pendiente de facturar), comparado contra el objetivo anual — esta es la foto real de cómo venimos</div>
+      <div id="av-chart"></div>
       <div class="legend-line">
-        <span><span class="legend-swatch" style="background:var(--rust)"></span>Brecha grande (forecast &gt;20% bajo el objetivo)</span>
-        <span><span class="legend-swatch" style="background:var(--gold)"></span>Brecha moderada (5–20%)</span>
-        <span><span class="legend-swatch" style="background:var(--green-accent)"></span>Forecast alineado o por encima</span>
+        <span><span class="legend-swatch" style="background:var(--gold)"></span>Vendido 2026</span>
         <span><span class="legend-swatch" style="background:var(--blue-accent)"></span>Objetivo 2026</span>
       </div>
     </section>
 
     <section class="panel">
-      <h2>Avance real de ventas 2026</h2>
-      <div class="panel-sub">Lo efectivamente vendido a la fecha (facturado + pendiente de facturar), comparado contra el objetivo anual — esta sí es la foto real de cómo venimos</div>
-      <div id="av-chart"></div>
+      <h2>Forecast vs. Objetivo</h2>
+      <div class="panel-sub">Cuánto se forecasteó para cada sucursal comparado con el objetivo anual de la compañía. Esto es planificación, no ventas reales — la sección de arriba es la que muestra el avance real.</div>
+      <div id="ob-chart"></div>
       <div class="legend-line">
-        <span><span class="legend-swatch" style="background:var(--gold)"></span>Vendido 2026</span>
+        <span><span class="legend-swatch" style="background:var(--rust)"></span>Brecha grande (forecast &gt;20% bajo el objetivo)</span>
+        <span><span class="legend-swatch" style="background:var(--gold)"></span>Brecha moderada (5–20%)</span>
+        <span><span class="legend-swatch" style="background:var(--green-accent)"></span>Forecast alineado o por encima</span>
         <span><span class="legend-swatch" style="background:var(--blue-accent)"></span>Objetivo 2026</span>
       </div>
     </section>
@@ -567,12 +567,13 @@
             <tr>
               <th data-key="sucursal">Sucursal<span class="arrow"></span></th>
               <th data-key="ventas2026" style="text-align:right">Vendido 2026<span class="arrow"></span></th>
+              <th data-key="pctObjVendido" style="text-align:right">% objetivo vendido<span class="arrow"></span></th>
+              <th data-key="vsForecast" style="text-align:right">Vs. forecast<span class="arrow"></span></th>
+              <th data-key="vsObjetivo" style="text-align:right">Vs. objetivo<span class="arrow"></span></th>
+              <th data-key="forecastActual" style="text-align:right">Forecast<span class="arrow"></span></th>
+              <th data-key="objetivo" style="text-align:right">Objetivo 2026<span class="arrow"></span></th>
               <th data-key="ventas2025" style="text-align:right">Vendido 2025<span class="arrow"></span></th>
               <th data-key="vsVentas2025" style="text-align:right">Vs. 2025<span class="arrow"></span></th>
-              <th data-key="forecastActual" style="text-align:right">Forecast<span class="arrow"></span></th>
-              <th data-key="vsForecast" style="text-align:right">Vs. forecast<span class="arrow"></span></th>
-              <th data-key="objetivo" style="text-align:right">Objetivo 2026<span class="arrow"></span></th>
-              <th data-key="pctObjVendido" style="text-align:right">% objetivo vendido<span class="arrow"></span></th>
               <th data-key="estado">Estado<span class="arrow"></span></th>
             </tr>
           </thead>
@@ -1367,15 +1368,17 @@ function renderObKPIs(matrix){
   const pctObjVendido = totalObjetivo>0 ? (totalVentas2026/totalObjetivo*100) : 0;
   const vsVentas2025 = totalVentas2026 - totalVentas2025;
   const vsForecast = totalVentas2026 - totalForecast;
+  const vsObjetivo = totalVentas2026 - totalObjetivo;
 
   const kpis = document.getElementById('ob-kpis');
   kpis.innerHTML = '';
   const cards = [
-    { label:'Objetivo 2026', value: totalObjetivo.toLocaleString('es-AR'), unit:'bolsas', foot:'suma de las 5 sucursales', alert:false },
-    { label:'Forecast planificado', value: totalForecast.toLocaleString('es-AR'), unit:'bolsas', foot: Math.round(pctForecastObj)+'% del objetivo — es lo que se planificó, no lo vendido', alert: pctForecastObj<90 },
-    { label:'Vendido 2026 a la fecha', value: totalVentas2026.toLocaleString('es-AR'), unit:'bolsas', foot: Math.round(pctObjVendido)+'% del objetivo ya vendido', alert:false, good:true },
-    { label:'Vs. ventas 2025', value: (vsVentas2025>=0?'+':'')+vsVentas2025.toLocaleString('es-AR'), unit:'bolsas', foot: vsVentas2025>=0 ? 'vendiendo más rápido que el año pasado' : 'por debajo del ritmo de 2025 a esta altura', alert: vsVentas2025<0 },
+    { label:'Vendido 2026 a la fecha', value: totalVentas2026.toLocaleString('es-AR'), unit:'bolsas', foot: Math.round(pctObjVendido)+'% del objetivo anual ya vendido', alert:false, good:true },
     { label:'Vs. forecast planificado', value: (vsForecast>=0?'+':'')+vsForecast.toLocaleString('es-AR'), unit:'bolsas', foot: vsForecast>=0 ? 'vendiendo por encima de lo forecasteado' : 'todavía no se vendió lo que se forecasteó', alert: vsForecast<0 },
+    { label:'Vs. objetivo 2026', value: (vsObjetivo>=0?'+':'')+vsObjetivo.toLocaleString('es-AR'), unit:'bolsas', foot: vsObjetivo<0 ? 'faltan para llegar al objetivo anual completo' : 'objetivo anual ya cubierto', alert: vsObjetivo<0 },
+    { label:'Vs. ventas 2025', value: (vsVentas2025>=0?'+':'')+vsVentas2025.toLocaleString('es-AR'), unit:'bolsas', foot: vsVentas2025>=0 ? 'vendiendo más rápido que el año pasado' : 'por debajo del ritmo de 2025 a esta altura', alert: vsVentas2025<0 },
+    { label:'Objetivo 2026 (referencia)', value: totalObjetivo.toLocaleString('es-AR'), unit:'bolsas', foot:'suma de las 5 sucursales', alert:false },
+    { label:'Forecast planificado (referencia)', value: totalForecast.toLocaleString('es-AR'), unit:'bolsas', foot: Math.round(pctForecastObj)+'% del objetivo — es lo planificado, no lo vendido', alert:false },
   ];
   cards.forEach(c=>{
     const div = document.createElement('div');
@@ -1448,14 +1451,16 @@ function renderObTable(matrix){
     const tr = document.createElement('tr');
     const vs25Cls = r.vsVentas2025<0?'neg':(r.vsVentas2025>0?'pos':'');
     const vsFcCls = r.vsForecast<0?'neg':(r.vsForecast>0?'pos':'');
+    const vsObjCls = r.vsObjetivo<0?'neg':(r.vsObjetivo>0?'pos':'');
     tr.innerHTML = `<td>${r.sucursal}</td>
       <td class="num">${r.ventas2026.toLocaleString('es-AR')}</td>
+      <td class="num">${Math.round(r.pctObjVendido)}%</td>
+      <td class="num ${vsFcCls}">${r.vsForecast>0?'+':''}${r.vsForecast.toLocaleString('es-AR')}</td>
+      <td class="num ${vsObjCls}">${r.vsObjetivo>0?'+':''}${r.vsObjetivo.toLocaleString('es-AR')}</td>
+      <td class="num">${r.forecastActual.toLocaleString('es-AR')}</td>
+      <td class="num">${r.objetivo.toLocaleString('es-AR')}</td>
       <td class="num">${r.ventas2025.toLocaleString('es-AR')}</td>
       <td class="num ${vs25Cls}">${r.vsVentas2025>0?'+':''}${r.vsVentas2025.toLocaleString('es-AR')}</td>
-      <td class="num">${r.forecastActual.toLocaleString('es-AR')}</td>
-      <td class="num ${vsFcCls}">${r.vsForecast>0?'+':''}${r.vsForecast.toLocaleString('es-AR')}</td>
-      <td class="num">${r.objetivo.toLocaleString('es-AR')}</td>
-      <td class="num">${Math.round(r.pctObjVendido)}%</td>
       <td><span class="badge ${badgeCls[r.estado]}">${r.label}</span></td>`;
     tbody.appendChild(tr);
   });
@@ -1474,8 +1479,8 @@ document.querySelectorAll('#ob-table thead th').forEach(th=>{
 function renderObjetivoTab(){
   const matrix = buildObjetivoMatrix();
   renderObKPIs(matrix);
-  renderObChart(matrix);
   renderAvanceChart(matrix);
+  renderObChart(matrix);
   renderObTable(matrix);
 }
 renderObjetivoTab();
