@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maíz — Campaña 2026/27 · RyCDAS</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root{
+    --bg-base:#132018;
+    --bg-panel:#1B2B21;
+    --bg-panel-alt:#203327;
+    --line:#33473A;
+    --text:#F1ECDC;
+    --text-muted:#9DB39A;
+    --text-dim:#6E8577;
+    --gold:#D9A441;
+    --gold-soft:#E9C57A;
+    --rust:#C1602E;
+    --green-accent:#6FA383;
+    --blue-accent:#6E9BC4;
+    --radius:3px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg-base);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    font-size:14px;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:36px 28px 64px;}
+
+  header.top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    border-bottom:1px solid var(--line);
+    padding-bottom:22px;
+    margin-bottom:0;
+    gap:20px;
+    flex-wrap:wrap;
+  }
+  header.top h1{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-optical-sizing:auto;
+    font-size:32px;
+    margin:0 0 6px;
+    color:var(--text);
+    letter-spacing:-0.01em;
+  }
+  header.top .sub{color:var(--text-muted);font-size:13.5px;max-width:560px;}
+  header.top .meta{
+    text-align:right;
+    color:var(--text-dim);
+    font-size:12px;
+    line-height:1.7;
+  }
+  header.top .meta b{color:var(--gold-soft);font-weight:600;}
+
+  /* Tabs */
+  nav.tabs{
+    display:flex;
+    gap:4px;
+    margin:0 0 28px;
+    border-bottom:1px solid var(--line);
+  }
+  nav.tabs button{
+    background:none;
+    border:none;
+    color:var(--text-dim);
+    font-family:'Inter',sans-serif;
+    font-size:13.5px;
+    font-weight:500;
+    padding:14px 18px 12px;
+    cursor:pointer;
+    border-bottom:2px solid transparent;
+    margin-bottom:-1px;
+  }
+  nav.tabs button:hover{color:var(--text-muted);}
+  nav.tabs button.active{color:var(--gold-soft);border-bottom-color:var(--gold);}
+  nav.tabs button.disabled{color:#4A5B4F;cursor:default;}
+  nav.tabs button.disabled:hover{color:#4A5B4F;}
+
+  .tabpanel{display:none;}
+  .tabpanel.active{display:block;}
+
+  /* KPI row */
+  .kpis{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    margin-bottom:32px;
+  }
+  #fc-kpis{grid-template-columns:repeat(auto-fit,minmax(200px,1fr));}
+  #vt-kpis{grid-template-columns:repeat(auto-fit,minmax(200px,1fr));}
+  #ob-kpis{grid-template-columns:repeat(auto-fit,minmax(200px,1fr));}
+  .kpi{
+    background:var(--bg-panel);
+    padding:20px 22px;
+  }
+  .kpi .label{font-size:11.5px;color:var(--text-dim);margin-bottom:10px;}
+  .kpi .value{font-family:'Fraunces',serif;font-size:30px;font-weight:600;color:var(--gold-soft);}
+  .kpi .value small{font-family:'Inter',sans-serif;font-size:14px;color:var(--text-muted);font-weight:500;margin-left:4px;}
+  .kpi .foot{font-size:11.5px;color:var(--text-dim);margin-top:8px;}
+  .kpi.alert .value{color:var(--rust);}
+  .kpi.alert .foot{color:#D98165;}
+  .kpi.good .value{color:var(--green-accent);}
+
+  /* Filter bar */
+  .filters{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    margin-bottom:22px;
+    padding:12px 16px;
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    flex-wrap:wrap;
+  }
+  .filters .flabel{font-size:11.5px;color:var(--text-dim);margin-right:2px;}
+  select{
+    background:var(--bg-panel-alt);
+    color:var(--text);
+    border:1px solid var(--line);
+    padding:7px 10px;
+    font-family:'Inter',sans-serif;
+    font-size:13px;
+    border-radius:var(--radius);
+  }
+  select:focus{outline:1px solid var(--gold);}
+  .reset-btn{
+    margin-left:auto;
+    background:none;
+    border:1px solid var(--line);
+    color:var(--text-muted);
+    padding:7px 14px;
+    font-size:12.5px;
+    border-radius:var(--radius);
+    cursor:pointer;
+    font-family:'Inter',sans-serif;
+  }
+  .reset-btn:hover{border-color:var(--gold);color:var(--gold-soft);}
+
+  section.panel{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    padding:22px 24px 26px;
+    margin-bottom:22px;
+  }
+  section.panel h2{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    font-size:17px;
+    margin:0 0 4px;
+    color:var(--text);
+  }
+  section.panel .panel-sub{font-size:12px;color:var(--text-dim);margin-bottom:18px;}
+
+  .grid-2{display:grid;grid-template-columns:1.3fr 1fr;gap:22px;}
+  @media(max-width:860px){.grid-2{grid-template-columns:1fr;}}
+
+  /* bar rows */
+  .barlist{display:flex;flex-direction:column;gap:10px;}
+  .barrow{display:grid;grid-template-columns:96px 1fr 88px;align-items:center;gap:10px;}
+  .barrow .name{font-size:12.5px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .barrow .track{height:16px;background:var(--bg-panel-alt);position:relative;border-radius:2px;overflow:hidden;display:flex;}
+  .barrow .fill{height:100%;background:linear-gradient(90deg,var(--green-accent),var(--gold));border-radius:2px 0 0 2px;transition:width .4s ease;}
+  .barrow .fill.solo{border-radius:2px;}
+  .barrow .fill.zero{background:var(--rust);width:3px !important;border-radius:2px;}
+  .barrow .fill-oa{
+    height:100%;
+    background:repeating-linear-gradient(45deg, rgba(217,164,65,.55), rgba(217,164,65,.55) 4px, rgba(217,164,65,.2) 4px, rgba(217,164,65,.2) 8px);
+    border-radius:0 2px 2px 0;
+  }
+  .barrow .val{font-size:12.5px;color:var(--text);text-align:right;font-variant-numeric:tabular-nums;}
+  .barrow .val small{display:block;color:var(--gold-soft);font-size:10.5px;font-weight:500;}
+
+  /* comparison bars (forecast vs recibido) */
+  .cmprow{display:grid;grid-template-columns:88px 1fr 130px;align-items:center;gap:10px;margin-bottom:14px;}
+  .cmprow .name{font-size:12.5px;color:var(--text-muted);}
+  .cmprow .track{position:relative;height:20px;background:var(--bg-panel-alt);border-radius:2px;overflow:visible;}
+  .cmprow .fc-mark{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--blue-accent);}
+  .cmprow .fill{position:absolute;left:0;top:0;height:100%;border-radius:2px;}
+  .cmprow .fill.under{background:var(--rust);}
+  .cmprow .fill.over{background:var(--green-accent);}
+  .cmprow .fill.ontrack{background:var(--gold);}
+  .cmprow .fill-oa{
+    position:absolute;top:0;height:100%;
+    background:repeating-linear-gradient(45deg, rgba(217,164,65,.55), rgba(217,164,65,.55) 4px, rgba(217,164,65,.2) 4px, rgba(217,164,65,.2) 8px);
+    border-radius:0 2px 2px 0;
+  }
+  .cmprow .pct{font-size:12px;text-align:right;font-variant-numeric:tabular-nums;color:var(--text);}
+  .cmprow .pct small{color:var(--text-dim);display:block;font-size:10.5px;}
+  .legend-line{display:flex;gap:18px;align-items:center;font-size:11px;color:var(--text-dim);margin-top:4px;flex-wrap:wrap;}
+  .legend-line span{display:inline-flex;align-items:center;gap:6px;}
+  .legend-swatch{width:10px;height:10px;border-radius:1px;display:inline-block;}
+  .legend-swatch.hatch{background:repeating-linear-gradient(45deg, rgba(217,164,65,.55), rgba(217,164,65,.55) 2px, rgba(217,164,65,.2) 2px, rgba(217,164,65,.2) 4px);}
+
+  /* timeline chart */
+  #timeline{width:100%;height:220px;display:block;}
+  .tl-tooltip{
+    position:absolute;
+    background:var(--bg-panel-alt);
+    border:1px solid var(--gold);
+    padding:6px 10px;
+    font-size:11.5px;
+    border-radius:2px;
+    pointer-events:none;
+    display:none;
+    color:var(--text);
+    white-space:nowrap;
+    z-index:5;
+  }
+  .chart-wrap{position:relative;}
+
+  /* table */
+  table{width:100%;border-collapse:collapse;font-size:12.5px;}
+  thead th{
+    text-align:left;
+    font-size:11px;
+    text-transform:none;
+    color:var(--text-dim);
+    font-weight:500;
+    padding:8px 10px;
+    border-bottom:1px solid var(--line);
+    cursor:pointer;
+    user-select:none;
+    white-space:nowrap;
+  }
+  thead th:hover{color:var(--gold-soft);}
+  thead th .arrow{opacity:.5;font-size:10px;margin-left:3px;}
+  tbody td{padding:7px 10px;border-bottom:1px solid #23342A;color:var(--text-muted);white-space:nowrap;}
+  tbody tr:hover td{background:var(--bg-panel-alt);color:var(--text);}
+  td.num{text-align:right;font-variant-numeric:tabular-nums;}
+  td.pos{color:var(--green-accent);}
+  td.neg{color:var(--rust);}
+  .table-scroll{max-height:420px;overflow-y:auto;border:1px solid var(--line);}
+  .table-scroll table{margin:0;}
+  .table-scroll thead th{position:sticky;top:0;background:var(--bg-panel);z-index:2;}
+
+  .rowcount{font-size:11.5px;color:var(--text-dim);margin-top:10px;}
+
+  .empty-state{padding:40px 0;text-align:center;color:var(--text-dim);font-size:13px;}
+
+  .badge{display:inline-block;padding:2px 7px;border-radius:2px;font-size:11px;font-weight:600;}
+  .badge.under{background:rgba(193,96,46,.18);color:#E08258;}
+  .badge.over{background:rgba(111,163,131,.18);color:var(--green-accent);}
+  .badge.ontrack{background:rgba(217,164,65,.18);color:var(--gold-soft);}
+
+  .callout{
+    border:1px solid var(--rust);
+    background:rgba(193,96,46,.08);
+    padding:14px 16px;
+    margin-bottom:22px;
+    font-size:12.5px;
+    color:#E5B79E;
+  }
+  .callout b{color:#EFCBB3;}
+
+  footer{
+    margin-top:30px;
+    padding-top:16px;
+    border-top:1px solid var(--line);
+    font-size:11px;
+    color:var(--text-dim);
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div>
+      <h1>Maíz — Campaña 2026/27</h1>
+      <div class="sub">Seguimiento de recepción de híbridos de maíz por sucursal, cruzado contra el forecast comercial armado por cliente.</div>
+    </div>
+    <div class="meta">RyCDAS · Brevant / Corteva<br>Recepción al <b id="meta-date">—</b><br><span id="meta-rows">—</span> movimientos registrados</div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="recibido">Recibido</button>
+    <button class="tab-btn" data-tab="forecast">Forecast vs Recibido</button>
+    <button class="tab-btn" data-tab="ventas">Ventas vs Stock</button>
+    <button class="tab-btn" data-tab="objetivo">Objetivo 2026</button>
+  </nav>
+
+  <!-- =================== TAB 1: RECIBIDO =================== -->
+  <div class="tabpanel active" id="tab-recibido">
+
+    <div class="kpis" id="kpis"></div>
+
+    <div class="filters">
+      <span class="flabel">Sucursal</span>
+      <select id="f-sucursal"><option value="">Todas</option></select>
+      <span class="flabel">Híbrido</span>
+      <select id="f-hibrido"><option value="">Todos</option></select>
+      <span class="flabel">Depósito</span>
+      <select id="f-deposito"><option value="">Todos</option></select>
+      <button class="reset-btn" id="reset">Limpiar filtros</button>
+    </div>
+
+    <div class="grid-2">
+      <section class="panel">
+        <h2>Bolsas netas por sucursal</h2>
+        <div class="panel-sub">Suma de cantidades recibidas menos transferencias, por sucursal</div>
+        <div class="barlist" id="chart-sucursal"></div>
+      </section>
+      <section class="panel">
+        <h2>Bolsas netas por híbrido</h2>
+        <div class="panel-sub">Agrupado por híbrido base, sin abrir por calibre ni tecnología</div>
+        <div class="barlist" id="chart-hibrido"></div>
+        <div class="legend-line">
+          <span><span class="legend-swatch" style="background:var(--gold)"></span>Recibido</span>
+          <span><span class="legend-swatch hatch"></span>En camino — OA</span>
+        </div>
+      </section>
+    </div>
+
+    <section class="panel">
+      <h2>Recepción acumulada en el tiempo</h2>
+      <div class="panel-sub">Bolsas netas acumuladas desde el inicio de la campaña</div>
+      <div class="chart-wrap">
+        <svg id="timeline" viewBox="0 0 1080 220" preserveAspectRatio="none"></svg>
+        <div class="tl-tooltip" id="tl-tooltip"></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Detalle de movimientos</h2>
+      <div class="panel-sub">Hacé clic en un encabezado para ordenar. Los valores negativos son salidas por transferencia entre depósitos.</div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th data-key="fecha">Fecha<span class="arrow"></span></th>
+              <th data-key="sucursal">Sucursal<span class="arrow"></span></th>
+              <th data-key="hibrido">Híbrido<span class="arrow"></span></th>
+              <th data-key="calibre">Calibre<span class="arrow"></span></th>
+              <th data-key="tecnologia">Tecnología<span class="arrow"></span></th>
+              <th data-key="deposito">Depósito<span class="arrow"></span></th>
+              <th data-key="cantidad" style="text-align:right">Cantidad<span class="arrow"></span></th>
+              <th data-key="lote">Lote<span class="arrow"></span></th>
+              <th data-key="vto">Vto. partida<span class="arrow"></span></th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+      <div class="rowcount" id="rowcount"></div>
+    </section>
+
+  </div>
+
+  <!-- =================== TAB 2: FORECAST VS RECIBIDO =================== -->
+  <div class="tabpanel" id="tab-forecast">
+
+    <div class="kpis" id="fc-kpis"></div>
+
+    <div id="fc-callout"></div>
+
+    <div class="filters">
+      <span class="flabel">Sucursal</span>
+      <select id="fc-f-sucursal"><option value="">Todas</option></select>
+      <button class="reset-btn" id="fc-reset">Limpiar filtros</button>
+    </div>
+
+    <div class="grid-2">
+      <section class="panel">
+        <h2>Cumplimiento por sucursal</h2>
+        <div class="panel-sub">Bolsas recibidas vs. bolsas forecasteadas — la marca celeste indica el objetivo</div>
+        <div id="fc-chart-sucursal"></div>
+        <div class="legend-line">
+          <span><span class="legend-swatch" style="background:var(--rust)"></span>Por debajo del forecast</span>
+          <span><span class="legend-swatch" style="background:var(--gold)"></span>En línea (±10%)</span>
+          <span><span class="legend-swatch" style="background:var(--green-accent)"></span>Por encima del forecast</span>
+          <span><span class="legend-swatch" style="background:var(--blue-accent)"></span>Objetivo (forecast)</span>
+        </div>
+      </section>
+      <section class="panel">
+        <h2>Cumplimiento por híbrido</h2>
+        <div class="panel-sub">Total recibido vs. forecasteado, todas las sucursales del filtro. Incluye OA en tránsito (rayado)</div>
+        <div id="fc-chart-hibrido"></div>
+        <div class="legend-line">
+          <span><span class="legend-swatch" style="background:var(--gold)"></span>Recibido</span>
+          <span><span class="legend-swatch hatch"></span>OA en tránsito</span>
+          <span><span class="legend-swatch" style="background:var(--blue-accent)"></span>Objetivo (forecast)</span>
+        </div>
+      </section>
+    </div>
+
+    <section class="panel">
+      <h2>Órdenes pendientes de recibir (OA)</h2>
+      <div class="panel-sub">Pedidos ya realizados a Corteva que todavía no llegaron físicamente. El archivo no distingue sucursal, así que se muestra a nivel compañía y se suma al recibido para ver la brecha real contra el forecast.</div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Híbrido</th>
+              <th style="text-align:right">Forecast (todas las sucursales)</th>
+              <th style="text-align:right">Recibido</th>
+              <th style="text-align:right">OA pendiente</th>
+              <th style="text-align:right">Recibido + OA</th>
+              <th style="text-align:right">Brecha final</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody id="oa-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Detalle sucursal × híbrido</h2>
+      <div class="panel-sub">Delta = recibido − forecast. Negativo: falta traer. Positivo: se trajo de más o sin correlación con el forecast.</div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th data-key="sucursal">Sucursal<span class="arrow"></span></th>
+              <th data-key="hibrido">Híbrido<span class="arrow"></span></th>
+              <th data-key="forecast" style="text-align:right">Forecast<span class="arrow"></span></th>
+              <th data-key="recibido" style="text-align:right">Recibido<span class="arrow"></span></th>
+              <th data-key="delta" style="text-align:right">Delta<span class="arrow"></span></th>
+              <th data-key="pct" style="text-align:right">% cumplido<span class="arrow"></span></th>
+              <th data-key="estado">Estado<span class="arrow"></span></th>
+            </tr>
+          </thead>
+          <tbody id="fc-tbody"></tbody>
+        </table>
+      </div>
+      <div class="rowcount" id="fc-rowcount"></div>
+    </section>
+
+  </div>
+
+  <!-- =================== TAB 3: VENTAS VS STOCK =================== -->
+  <div class="tabpanel" id="tab-ventas">
+
+    <div class="kpis" id="vt-kpis"></div>
+
+    <div id="vt-callout"></div>
+
+    <section class="panel">
+      <h2>Resumen por híbrido — todas las sucursales</h2>
+      <div class="panel-sub">Vendido, forecast y recibido (+ OA en camino) combinando las cinco sucursales, para saber qué híbrido falta traer sin importar dónde. Ordenado por lo que más urge traer.</div>
+      <div class="table-scroll">
+        <table id="hs-table">
+          <thead>
+            <tr>
+              <th data-key="hibrido">Híbrido<span class="arrow"></span></th>
+              <th data-key="forecast" style="text-align:right">Forecast<span class="arrow"></span></th>
+              <th data-key="recibido" style="text-align:right">Recibido<span class="arrow"></span></th>
+              <th data-key="oa" style="text-align:right">OA en camino<span class="arrow"></span></th>
+              <th data-key="recibidoOA" style="text-align:right">Recibido + OA<span class="arrow"></span></th>
+              <th data-key="vendido" style="text-align:right">Vendido<span class="arrow"></span></th>
+              <th data-key="stock" style="text-align:right">Stock disp.<span class="arrow"></span></th>
+              <th data-key="faltaTraer" style="text-align:right">Falta traer<span class="arrow"></span></th>
+              <th data-key="estado">Estado<span class="arrow"></span></th>
+            </tr>
+          </thead>
+          <tbody id="hs-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="filters">
+      <span class="flabel">Sucursal</span>
+      <select id="vt-f-sucursal"><option value="">Todas</option></select>
+      <button class="reset-btn" id="vt-reset">Limpiar filtros</button>
+    </div>
+
+    <div class="grid-2">
+      <section class="panel">
+        <h2>Ventas vs. forecast por sucursal</h2>
+        <div class="panel-sub">Bolsas vendidas (facturado + pendiente de facturar) vs. objetivo de la campaña</div>
+        <div id="vt-chart-sucursal"></div>
+        <div class="legend-line">
+          <span><span class="legend-swatch" style="background:var(--rust)"></span>Stock físico agotado o negativo</span>
+          <span><span class="legend-swatch" style="background:var(--gold)"></span>Demanda alta (&gt;85% del forecast vendido)</span>
+          <span><span class="legend-swatch" style="background:var(--green-accent)"></span>Cobertura tranquila</span>
+          <span><span class="legend-swatch" style="background:var(--blue-accent)"></span>Objetivo (forecast)</span>
+        </div>
+      </section>
+      <section class="panel">
+        <h2>Stock disponible por híbrido</h2>
+        <div class="panel-sub">Recibido menos vendido. Negativo: se vendió más de lo que llegó físicamente</div>
+        <div id="vt-chart-stock"></div>
+      </section>
+    </div>
+
+    <section class="panel">
+      <h2>Detalle sucursal × híbrido</h2>
+      <div class="panel-sub">Stock disponible = recibido − vendido. Bolsas a traer = lo que falta para cubrir el forecast total (forecast − recibido), sin importar el ritmo de venta.</div>
+      <div class="table-scroll">
+        <table id="vt-detail-table">
+          <thead>
+            <tr>
+              <th data-key="sucursal">Sucursal<span class="arrow"></span></th>
+              <th data-key="hibrido">Híbrido<span class="arrow"></span></th>
+              <th data-key="forecast" style="text-align:right">Forecast<span class="arrow"></span></th>
+              <th data-key="recibido" style="text-align:right">Recibido<span class="arrow"></span></th>
+              <th data-key="facturado" style="text-align:right">Facturado<span class="arrow"></span></th>
+              <th data-key="pendiente" style="text-align:right">Pend. facturar<span class="arrow"></span></th>
+              <th data-key="vendido" style="text-align:right">Vendido total<span class="arrow"></span></th>
+              <th data-key="stock" style="text-align:right">Stock disp.<span class="arrow"></span></th>
+              <th data-key="pctForecast" style="text-align:right">% forecast vendido<span class="arrow"></span></th>
+              <th data-key="estado">Estado<span class="arrow"></span></th>
+            </tr>
+          </thead>
+          <tbody id="vt-tbody"></tbody>
+        </table>
+      </div>
+      <div class="rowcount" id="vt-rowcount"></div>
+    </section>
+
+  </div>
+
+  <!-- =================== TAB 4: OBJETIVO 2026 =================== -->
+  <div class="tabpanel" id="tab-objetivo">
+
+    <div class="kpis" id="ob-kpis"></div>
+
+    <section class="panel">
+      <h2>Avance hacia el objetivo por sucursal</h2>
+      <div class="panel-sub">Forecast actual vs. objetivo 2026. La marca celeste indica el objetivo de cada sucursal</div>
+      <div id="ob-chart"></div>
+      <div class="legend-line">
+        <span><span class="legend-swatch" style="background:var(--rust)"></span>Falta &gt;20% para el objetivo</span>
+        <span><span class="legend-swatch" style="background:var(--gold)"></span>Falta 5–20%</span>
+        <span><span class="legend-swatch" style="background:var(--green-accent)"></span>A menos del 5% o cumplido</span>
+        <span><span class="legend-swatch" style="background:var(--blue-accent)"></span>Objetivo 2026</span>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Detalle por sucursal</h2>
+      <div class="panel-sub">Objetivo 2026 y forecast actual, comparados también contra lo vendido en toda la campaña 2025</div>
+      <div class="table-scroll">
+        <table id="ob-table">
+          <thead>
+            <tr>
+              <th data-key="sucursal">Sucursal<span class="arrow"></span></th>
+              <th data-key="objetivo" style="text-align:right">Objetivo 2026<span class="arrow"></span></th>
+              <th data-key="forecastActual" style="text-align:right">Forecast actual<span class="arrow"></span></th>
+              <th data-key="pctObjetivo" style="text-align:right">% del objetivo<span class="arrow"></span></th>
+              <th data-key="ventas2025" style="text-align:right">Ventas 2025<span class="arrow"></span></th>
+              <th data-key="brecha" style="text-align:right">Vs. objetivo<span class="arrow"></span></th>
+              <th data-key="vs2025" style="text-align:right">Vs. 2025<span class="arrow"></span></th>
+              <th data-key="estado">Estado<span class="arrow"></span></th>
+            </tr>
+          </thead>
+          <tbody id="ob-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    <span>RyCDAS — Rindes y Cultivos DAS</span>
+    <span>Tandil · Azul · Olavarría · Belgrano · Bolívar</span>
+  </footer>
+
+</div>
+
+<script>
+const RAW = [{"sucursal": "Tandil", "hibrido": "8472", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-01-16", "cantidad": -45, "lote": "C050O2DL09", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8181", "calibre": "C17", "tecnologia": "PWU", "fecha": "2026-01-16", "cantidad": -30, "lote": "7049476", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8181", "calibre": "R17", "tecnologia": "PWU", "fecha": "2026-01-16", "cantidad": -44, "lote": "7049506", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8472", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-01-16", "cantidad": 45, "lote": "C050O2DL09", "vto": "2028-01-01", "deposito": "TANDIL PROPIO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8181", "calibre": "C17", "tecnologia": "PWU", "fecha": "2026-01-16", "cantidad": 30, "lote": "7049476", "vto": "2028-01-01", "deposito": "TANDIL PROPIO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8181", "calibre": "R17", "tecnologia": "PWU", "fecha": "2026-01-16", "cantidad": 44, "lote": "7049506", "vto": "2028-01-01", "deposito": "TANDIL PROPIO BASE AEREA"}, {"sucursal": "Azul", "hibrido": "RFG 22", "calibre": "C19", "tecnologia": "RRE", "fecha": "2026-01-16", "cantidad": -5, "lote": "C050O31M14", "vto": "2027-09-10", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "NEXT 22.6", "calibre": "C19", "tecnologia": "PWUE", "fecha": "2026-01-16", "cantidad": -3, "lote": "C050O1KP01", "vto": "2026-01-01", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "8380", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-01-16", "cantidad": -2, "lote": "L268P3VC01", "vto": "2027-06-04", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "8181", "calibre": "C17", "tecnologia": "PWU", "fecha": "2026-01-16", "cantidad": -30, "lote": "7049476", "vto": "2028-01-01", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "RFG 22", "calibre": "C19", "tecnologia": "RRE", "fecha": "2026-01-16", "cantidad": 5, "lote": "C050O31M14", "vto": "2027-09-10", "deposito": "AZUL PROPIO"}, {"sucursal": "Azul", "hibrido": "NEXT 22.6", "calibre": "C19", "tecnologia": "PWUE", "fecha": "2026-01-16", "cantidad": 3, "lote": "C050O1KP01", "vto": "2026-01-01", "deposito": "AZUL PROPIO"}, {"sucursal": "Azul", "hibrido": "8380", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-01-16", "cantidad": 2, "lote": "L268P3VC01", "vto": "2027-06-04", "deposito": "AZUL PROPIO"}, {"sucursal": "Azul", "hibrido": "8181", "calibre": "C17", "tecnologia": "PWU", "fecha": "2026-01-16", "cantidad": 30, "lote": "7049476", "vto": "2028-01-01", "deposito": "AZUL PROPIO"}, {"sucursal": "Bolívar", "hibrido": "8380", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-01-16", "cantidad": -22, "lote": "L268P6IM03", "vto": "2027-01-01", "deposito": "BOLIVAR CYO"}, {"sucursal": "Bolívar", "hibrido": "8421", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-01-16", "cantidad": -72, "lote": "L020N34L02", "vto": "2027-07-29", "deposito": "BOLIVAR CYO"}, {"sucursal": "Bolívar", "hibrido": "8421", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-01-16", "cantidad": -13, "lote": "6968584", "vto": "2027-08-29", "deposito": "BOLIVAR CYO"}, {"sucursal": "Bolívar", "hibrido": "8181", "calibre": "C17", "tecnologia": "PWU", "fecha": "2026-01-16", "cantidad": -5, "lote": "7049476", "vto": "2028-01-01", "deposito": "BOLIVAR CYO"}, {"sucursal": "Bolívar", "hibrido": "8380", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-01-16", "cantidad": 22, "lote": "L268P6IM03", "vto": "2027-01-01", "deposito": "BOLIVAR PROPIO"}, {"sucursal": "Bolívar", "hibrido": "8421", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-01-16", "cantidad": 72, "lote": "L020N34L02", "vto": "2027-07-29", "deposito": "BOLIVAR PROPIO"}, {"sucursal": "Bolívar", "hibrido": "8421", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-01-16", "cantidad": 13, "lote": "6968584", "vto": "2027-08-29", "deposito": "BOLIVAR PROPIO"}, {"sucursal": "Bolívar", "hibrido": "8181", "calibre": "C17", "tecnologia": "PWU", "fecha": "2026-01-16", "cantidad": 5, "lote": "7049476", "vto": "2028-01-01", "deposito": "BOLIVAR PROPIO"}, {"sucursal": "Olavarría", "hibrido": "RFG 22", "calibre": "C19", "tecnologia": "RRE", "fecha": "2026-01-19", "cantidad": -3, "lote": "C050O31M14", "vto": "2027-09-10", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Olavarría", "hibrido": "8421", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-01-19", "cantidad": -25, "lote": "L287O4PM04", "vto": "2027-03-29", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Olavarría", "hibrido": "8181", "calibre": "C17", "tecnologia": "PWU", "fecha": "2026-01-19", "cantidad": -8, "lote": "7049476", "vto": "2028-01-01", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Olavarría", "hibrido": "NEXT 22.6", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-01-19", "cantidad": -1, "lote": "L287P7BC01", "vto": "2027-10-20", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Olavarría", "hibrido": "RFG 22", "calibre": "C19", "tecnologia": "RRE", "fecha": "2026-01-19", "cantidad": 3, "lote": "C050O31M14", "vto": "2027-09-10", "deposito": "OLAVARRIA PROPIO"}, {"sucursal": "Olavarría", "hibrido": "8421", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-01-19", "cantidad": 25, "lote": "L287O4PM04", "vto": "2027-03-29", "deposito": "OLAVARRIA PROPIO"}, {"sucursal": "Olavarría", "hibrido": "8181", "calibre": "C17", "tecnologia": "PWU", "fecha": "2026-01-19", "cantidad": 8, "lote": "7049476", "vto": "2028-01-01", "deposito": "OLAVARRIA PROPIO"}, {"sucursal": "Olavarría", "hibrido": "NEXT 22.6", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-01-19", "cantidad": 1, "lote": "L287P7BC01", "vto": "2027-10-20", "deposito": "OLAVARRIA PROPIO"}, {"sucursal": "Olavarría", "hibrido": "8421", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-05-04", "cantidad": -25, "lote": "L287O4PM04", "vto": "2027-03-29", "deposito": "OLAVARRIA PROPIO"}, {"sucursal": "Olavarría", "hibrido": "8380", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-05-04", "cantidad": -8, "lote": "L283P45L05", "vto": "2027-05-30", "deposito": "OLAVARRIA PROPIO"}, {"sucursal": "Olavarría", "hibrido": "8380", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-05-04", "cantidad": -22, "lote": "L268P6OL18", "vto": "2027-07-29", "deposito": "OLAVARRIA PROPIO"}, {"sucursal": "Olavarría", "hibrido": "8380", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-05-04", "cantidad": -3, "lote": "L287P5JM01", "vto": "2027-08-11", "deposito": "OLAVARRIA PROPIO"}, {"sucursal": "Olavarría", "hibrido": "NEXT 22.6", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-05-04", "cantidad": -1, "lote": "L287P7BC01", "vto": "2027-10-20", "deposito": "OLAVARRIA PROPIO"}, {"sucursal": "Olavarría", "hibrido": "NEXT 22.6", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-05-04", "cantidad": -7, "lote": "6959594", "vto": "2027-10-20", "deposito": "OLAVARRIA PROPIO"}, {"sucursal": "Olavarría", "hibrido": "NEXT 22.6", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-05-04", "cantidad": -1, "lote": "L287P7BC01", "vto": "2027-10-20", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Olavarría", "hibrido": "NEXT 22.6", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-05-04", "cantidad": 1, "lote": "L268P4FC01", "vto": "2027-07-29", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Olavarría", "hibrido": "8421", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-05-04", "cantidad": 21, "lote": "L287O53M01", "vto": "2026-01-01", "deposito": "OLAVARRIA PROPIO"}, {"sucursal": "Olavarría", "hibrido": "8421", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-05-04", "cantidad": 2, "lote": "L268O43C03", "vto": "2026-07-08", "deposito": "OLAVARRIA PROPIO"}, {"sucursal": "Olavarría", "hibrido": "8380", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-05-04", "cantidad": 21, "lote": "L268O4JM04", "vto": "2026-05-31", "deposito": "OLAVARRIA PROPIO"}, {"sucursal": "Olavarría", "hibrido": "NEXT 22.6", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-05-04", "cantidad": 1, "lote": "C050O3NC03", "vto": "2026-01-01", "deposito": "OLAVARRIA PROPIO"}, {"sucursal": "Olavarría", "hibrido": "NEXT 22.6", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-05-05", "cantidad": 7, "lote": "C050O3NC03", "vto": "2026-01-01", "deposito": "OLAVARRIA PROPIO"}, {"sucursal": "Tandil", "hibrido": "8380", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-05-08", "cantidad": -8, "lote": "L268P3VC01", "vto": "2027-04-06", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8380", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-05-08", "cantidad": -4, "lote": "L287P5JM01", "vto": "2027-08-11", "deposito": "TANDIL PROPIO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8472", "calibre": "C17", "tecnologia": "PWU", "fecha": "2026-05-08", "cantidad": -4, "lote": "L268O5BM07", "vto": "2026-06-10", "deposito": "TANDIL PROPIO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8380", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-05-08", "cantidad": 6, "lote": "L268P6IM03", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8380", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-05-08", "cantidad": 2, "lote": "L268O4JM04", "vto": "2026-05-31", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8380", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-05-08", "cantidad": 4, "lote": "L268O4JM04", "vto": "2026-05-31", "deposito": "TANDIL PROPIO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8472", "calibre": "C17", "tecnologia": "PWU", "fecha": "2026-05-08", "cantidad": 4, "lote": "L268O5GC02", "vto": "2028-01-01", "deposito": "TANDIL PROPIO BASE AEREA"}, {"sucursal": "Olavarría", "hibrido": "8421", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-05-08", "cantidad": 2, "lote": "L287O4PM04", "vto": "2027-03-29", "deposito": "OLAVARRIA PROPIO"}, {"sucursal": "Azul", "hibrido": "NEXT 22.6", "calibre": "C19", "tecnologia": "PWUE", "fecha": "2026-05-11", "cantidad": -3, "lote": "C050O1KP01", "vto": "2026-01-01", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "NEXT 22.6", "calibre": "C19", "tecnologia": "PWUE", "fecha": "2026-05-11", "cantidad": -4, "lote": "L268O3PC07", "vto": "2027-03-29", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "NEXT 22.6", "calibre": "C19", "tecnologia": "PWUE", "fecha": "2026-05-11", "cantidad": -2, "lote": "L268O3PC07", "vto": "2027-03-29", "deposito": "AZUL PROPIO"}, {"sucursal": "Azul", "hibrido": "NEXT 22.6", "calibre": "C19", "tecnologia": "PWUE", "fecha": "2026-05-11", "cantidad": -1, "lote": "L268P4BC01", "vto": "2027-07-29", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "NEXT 22.6", "calibre": "C19", "tecnologia": "PWUE", "fecha": "2026-05-11", "cantidad": -6, "lote": "L268O6AL01", "vto": "2028-01-01", "deposito": "AZUL PROPIO"}, {"sucursal": "Azul", "hibrido": "NEXT 22.6", "calibre": "C19", "tecnologia": "PWUE", "fecha": "2026-05-11", "cantidad": -4, "lote": "L268O6DM03", "vto": "2028-01-01", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "NEXT 22.6", "calibre": "C19", "tecnologia": "PWUE", "fecha": "2026-05-11", "cantidad": -1, "lote": "L268O6DM03", "vto": "2028-01-01", "deposito": "AZUL PROPIO"}, {"sucursal": "Azul", "hibrido": "NEXT 22.6", "calibre": "C19", "tecnologia": "PWUE", "fecha": "2026-05-11", "cantidad": -2, "lote": "L020B2L03", "vto": "2026-03-19", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "NEXT 22.6", "calibre": "C19", "tecnologia": "PWUE", "fecha": "2026-05-11", "cantidad": 14, "lote": "L020NB2L02", "vto": "2025-03-19", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "NEXT 22.6", "calibre": "C19", "tecnologia": "PWUE", "fecha": "2026-05-11", "cantidad": 9, "lote": "L020NB2L02", "vto": "2025-03-19", "deposito": "AZUL PROPIO"}, {"sucursal": "Azul", "hibrido": "8421", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-05-11", "cantidad": -2, "lote": "L277O7JL18", "vto": "2026-09-05", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "8421", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-05-11", "cantidad": -1, "lote": "L287O4PM04", "vto": "2027-03-29", "deposito": "AZUL PROPIO"}, {"sucursal": "Azul", "hibrido": "8421", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-05-11", "cantidad": -1, "lote": "L020O2JL04", "vto": "2026-03-27", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "8421", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-05-11", "cantidad": -2, "lote": "L287O53M01", "vto": "2026-01-01", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "8421", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-05-11", "cantidad": 1, "lote": "L020N37M08", "vto": "2025-06-16", "deposito": "AZUL PROPIO"}, {"sucursal": "Azul", "hibrido": "8421", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-05-11", "cantidad": 4, "lote": "L268O43C03", "vto": "2026-08-07", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "8421", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-05-11", "cantidad": 1, "lote": "L020N34L02", "vto": "2027-07-29", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "8380", "calibre": "C19", "tecnologia": "PWUE", "fecha": "2026-05-11", "cantidad": -1, "lote": "L268O4IL06", "vto": "2026-05-31", "deposito": "AZUL PROPIO"}, {"sucursal": "Azul", "hibrido": "8380", "calibre": "C19", "tecnologia": "PWUE", "fecha": "2026-05-11", "cantidad": 1, "lote": "L268O5NL04", "vto": "2026-09-12", "deposito": "AZUL PROPIO"}, {"sucursal": "Azul", "hibrido": "8472", "calibre": "C17", "tecnologia": "PWU", "fecha": "2026-05-11", "cantidad": -1, "lote": "L268O5AP13", "vto": "2026-06-10", "deposito": "AZUL PROPIO"}, {"sucursal": "Azul", "hibrido": "8472", "calibre": "C17", "tecnologia": "PWU", "fecha": "2026-05-11", "cantidad": 1, "lote": "L268O5BM07", "vto": "2026-06-10", "deposito": "AZUL PROPIO"}, {"sucursal": "Azul", "hibrido": "NEXT 22.6", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-05-11", "cantidad": -4, "lote": "L268O6LC08", "vto": "2027-06-04", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "NEXT 22.6", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-05-11", "cantidad": -2, "lote": "L287P7BC01", "vto": "2027-10-20", "deposito": "AZUL PROPIO"}, {"sucursal": "Azul", "hibrido": "NEXT 22.6", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-05-11", "cantidad": 4, "lote": "C050O3NC03", "vto": "2026-01-01", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "NEXT 22.6", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-05-11", "cantidad": 1, "lote": "C050O3NC03", "vto": "2026-01-01", "deposito": "AZUL PROPIO"}, {"sucursal": "Azul", "hibrido": "NEXT 22.6", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-05-11", "cantidad": 1, "lote": "C050O3IC01", "vto": "2026-05-31", "deposito": "AZUL PROPIO"}, {"sucursal": "Azul", "hibrido": "NEXT 22.6", "calibre": "C19", "tecnologia": "PWUE", "fecha": "2026-05-26", "cantidad": -22, "lote": "C050O1KP01", "vto": "2026-01-01", "deposito": "AZUL PROPIO"}, {"sucursal": "Azul", "hibrido": "NEXT 22.6", "calibre": "C19", "tecnologia": "PWUE", "fecha": "2026-05-26", "cantidad": 3, "lote": "L268O6AL01", "vto": "2028-01-01", "deposito": "AZUL PROPIO"}, {"sucursal": "Azul", "hibrido": "NEXT 22.6", "calibre": "C19", "tecnologia": "PWUE", "fecha": "2026-05-26", "cantidad": 19, "lote": "L020NB2L02", "vto": "2025-03-19", "deposito": "AZUL PROPIO"}, {"sucursal": "Azul", "hibrido": "8472", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-06-05", "cantidad": 10, "lote": "L268O5AC11", "vto": "2028-06-05", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "8472", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-06-05", "cantidad": 990, "lote": "L268O5EC02", "vto": "2028-06-05", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "8472", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-06-05", "cantidad": -3, "lote": "L268O5EC02", "vto": "2028-06-05", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-06-05", "cantidad": 576, "lote": "7388992", "vto": "2026-06-05", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "RFG 22", "calibre": "C17", "tecnologia": "RR", "fecha": "2026-06-05", "cantidad": 60, "lote": "L268O7JC05", "vto": "2028-06-05", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "RFG 22", "calibre": "C19", "tecnologia": "RRE", "fecha": "2026-06-05", "cantidad": 23, "lote": "7276675", "vto": "2028-06-05", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "RFG 22", "calibre": "R17", "tecnologia": "RRE", "fecha": "2026-06-05", "cantidad": 58, "lote": "7155581", "vto": "2028-06-05", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "RFG 22", "calibre": "R19", "tecnologia": "RRE", "fecha": "2026-06-05", "cantidad": 9, "lote": "7297506", "vto": "2028-06-05", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "RFG 22", "calibre": "R19", "tecnologia": "RRE", "fecha": "2026-06-05", "cantidad": 20, "lote": "7318875", "vto": "2028-06-05", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "NEXT 22.6", "calibre": "C21", "tecnologia": "PWUE", "fecha": "2026-06-05", "cantidad": 23, "lote": "L268O6EP05", "vto": "2028-06-05", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "NEXT 22.6", "calibre": "C21", "tecnologia": "PWUE", "fecha": "2026-06-05", "cantidad": 1, "lote": "L268O3SP01", "vto": "2028-06-05", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "8421", "calibre": "R21", "tecnologia": "PWUE", "fecha": "2026-06-05", "cantidad": 221, "lote": "7352550", "vto": "2028-06-05", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "8421", "calibre": "R21", "tecnologia": "PWUE", "fecha": "2026-06-05", "cantidad": 60, "lote": "7353244", "vto": "2028-06-05", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "8421", "calibre": "R21", "tecnologia": "PWUE", "fecha": "2026-06-05", "cantidad": 7, "lote": "7405594", "vto": "2028-06-05", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "NEXT 22.6", "calibre": "C21", "tecnologia": "PWUE", "fecha": "2026-06-05", "cantidad": 180, "lote": "L268O6EP05", "vto": "2028-06-05", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "NEXT 22.6", "calibre": "C21", "tecnologia": "PWUE", "fecha": "2026-06-05", "cantidad": 12, "lote": "L268O68P09", "vto": "2028-06-05", "deposito": "AZUL CYO"}, {"sucursal": "Olavarría", "hibrido": "8421", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-06-05", "cantidad": 216, "lote": "7405567", "vto": "2028-06-05", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Olavarría", "hibrido": "8380", "calibre": "R21", "tecnologia": "PWUE", "fecha": "2026-06-05", "cantidad": 64, "lote": "7394678", "vto": "2028-06-05", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Tandil", "hibrido": "8181", "calibre": "R18", "tecnologia": "PWU", "fecha": "2026-06-08", "cantidad": 20, "lote": "7352881", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8181", "calibre": "R18", "tecnologia": "PWU", "fecha": "2026-06-08", "cantidad": 80, "lote": "7368911", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8181", "calibre": "C16", "tecnologia": "PWU", "fecha": "2026-06-08", "cantidad": 141, "lote": "7352869", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8181", "calibre": "C16", "tecnologia": "PWU", "fecha": "2026-06-08", "cantidad": 9, "lote": "7362388", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "NEXT 22.6", "calibre": "C21", "tecnologia": "PWUE", "fecha": "2026-06-08", "cantidad": 1, "lote": "L268O3SP01", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "NEXT 22.6", "calibre": "C21", "tecnologia": "PWUE", "fecha": "2026-06-08", "cantidad": 180, "lote": "L268O6EP05", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "NEXT 22.6", "calibre": "C21", "tecnologia": "PWUE", "fecha": "2026-06-08", "cantidad": 35, "lote": "L268O6OP10", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-06-08", "cantidad": 38, "lote": "7382365", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-06-08", "cantidad": 432, "lote": "7388992", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "RFG 22", "calibre": "C17", "tecnologia": "RR", "fecha": "2026-06-08", "cantidad": 10, "lote": "L268O7JC05", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "RFG 22", "calibre": "R19", "tecnologia": "RR", "fecha": "2026-06-08", "cantidad": 10, "lote": "L268O7KL01", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8380", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-06-08", "cantidad": 153, "lote": "7371328", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8380", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-06-08", "cantidad": 63, "lote": "7371328", "vto": "2028-01-01", "deposito": "TANDIL PROPIO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8380", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-06-08", "cantidad": 4, "lote": "7382342", "vto": "2028-01-01", "deposito": "TANDIL PROPIO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8380", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-06-08", "cantidad": 14, "lote": "7394752", "vto": "2028-01-01", "deposito": "TANDIL PROPIO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8380", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-06-08", "cantidad": 16, "lote": "7399458", "vto": "2028-01-01", "deposito": "TANDIL PROPIO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "RFG 22", "calibre": "C17", "tecnologia": "RR", "fecha": "2026-06-08", "cantidad": 5, "lote": "L268O7JC05", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "RFG 22", "calibre": "C19", "tecnologia": "RRE", "fecha": "2026-06-08", "cantidad": 22, "lote": "7276752", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "RFG 22", "calibre": "C17", "tecnologia": "RRE", "fecha": "2026-06-08", "cantidad": 76, "lote": "7310612", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "RFG 22", "calibre": "R17", "tecnologia": "RRE", "fecha": "2026-06-08", "cantidad": 47, "lote": "7155581", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8421", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-06-08", "cantidad": 504, "lote": "7405563", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Azul", "hibrido": "8181", "calibre": "C16", "tecnologia": "PWU", "fecha": "2026-06-08", "cantidad": 150, "lote": "7352869", "vto": "2028-06-08", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "RFG 22", "calibre": "C17", "tecnologia": "RR", "fecha": "2026-06-08", "cantidad": 23, "lote": "L268O7HC03", "vto": "2028-06-08", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "RFG 22", "calibre": "C17", "tecnologia": "RR", "fecha": "2026-06-08", "cantidad": 32, "lote": "L268O7JC05", "vto": "2028-06-08", "deposito": "AZUL CYO"}, {"sucursal": "Olavarría", "hibrido": "NEXT 22.6", "calibre": "C21", "tecnologia": "PWUE", "fecha": "2026-06-08", "cantidad": 8, "lote": "L268O6CP05", "vto": "2028-06-08", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Olavarría", "hibrido": "RFG 22", "calibre": "R19", "tecnologia": "RR", "fecha": "2026-06-08", "cantidad": 68, "lote": "C050O36C09", "vto": "2028-06-08", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Olavarría", "hibrido": "RFG 22", "calibre": "R19", "tecnologia": "RR", "fecha": "2026-06-08", "cantidad": 30, "lote": "L268O7IC06", "vto": "2028-06-08", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Olavarría", "hibrido": "8472", "calibre": "R18", "tecnologia": "PWUN", "fecha": "2026-06-08", "cantidad": 580, "lote": "L268O5IC01", "vto": "2028-06-08", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Olavarría", "hibrido": "8472", "calibre": "C18", "tecnologia": "PWUN", "fecha": "2026-06-08", "cantidad": 2, "lote": "L268O5AM12", "vto": "2028-06-08", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Olavarría", "hibrido": "8472", "calibre": "C18", "tecnologia": "PWUN", "fecha": "2026-06-08", "cantidad": 355, "lote": "L268O5FC04", "vto": "2028-06-08", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Olavarría", "hibrido": "8472", "calibre": "C18", "tecnologia": "PWUN", "fecha": "2026-06-08", "cantidad": 63, "lote": "L268O5KM02", "vto": "2028-06-08", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Olavarría", "hibrido": "8380", "calibre": "R21", "tecnologia": "PWUE", "fecha": "2026-06-09", "cantidad": 372, "lote": "7393007", "vto": "2028-06-09", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Olavarría", "hibrido": "RFG 22", "calibre": "R19", "tecnologia": "RR", "fecha": "2026-06-09", "cantidad": 9, "lote": "C050O36C09", "vto": "2028-06-09", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Olavarría", "hibrido": "RFG 22", "calibre": "R19", "tecnologia": "RR", "fecha": "2026-06-09", "cantidad": 1, "lote": "L268O7IC06", "vto": "2028-06-09", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Olavarría", "hibrido": "RFG 22", "calibre": "C19", "tecnologia": "RR", "fecha": "2026-06-09", "cantidad": 15, "lote": "L268O7HM04", "vto": "2028-06-09", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Olavarría", "hibrido": "RFG 22", "calibre": "C19", "tecnologia": "RR", "fecha": "2026-06-09", "cantidad": 27, "lote": "L268O7HM04", "vto": "2028-06-09", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Olavarría", "hibrido": "8472", "calibre": "R18", "tecnologia": "PWUN", "fecha": "2026-06-09", "cantidad": 498, "lote": "L268O5IC01", "vto": "2028-06-09", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Olavarría", "hibrido": "RFG 22", "calibre": "C19", "tecnologia": "RRE", "fecha": "2026-06-10", "cantidad": 7, "lote": "7276675", "vto": "2028-06-10", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Olavarría", "hibrido": "RFG 22", "calibre": "R19", "tecnologia": "RRE", "fecha": "2026-06-10", "cantidad": 45, "lote": "7318877", "vto": "2028-06-10", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Olavarría", "hibrido": "RFG 22", "calibre": "C17", "tecnologia": "RRE", "fecha": "2026-06-10", "cantidad": 5, "lote": "7310612", "vto": "2028-06-10", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Olavarría", "hibrido": "RFG 22", "calibre": "C17", "tecnologia": "RRE", "fecha": "2026-06-10", "cantidad": 17, "lote": "7314403", "vto": "2028-06-10", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Belgrano", "hibrido": "8380", "calibre": "R21", "tecnologia": "PWUE", "fecha": "2026-06-11", "cantidad": 64, "lote": "7394678", "vto": "2028-01-01", "deposito": "GBELGRANO CYO"}, {"sucursal": "Belgrano", "hibrido": "RFG 22", "calibre": "R17", "tecnologia": "RRE", "fecha": "2026-06-11", "cantidad": 21, "lote": "7153299", "vto": "2028-01-01", "deposito": "GBELGRANO CYO"}, {"sucursal": "Belgrano", "hibrido": "RFG 22", "calibre": "R19", "tecnologia": "RRE", "fecha": "2026-06-11", "cantidad": 7, "lote": "7318877", "vto": "2028-01-01", "deposito": "GBELGRANO CYO"}, {"sucursal": "Belgrano", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-06-11", "cantidad": 177, "lote": "7394706", "vto": "2028-01-01", "deposito": "GBELGRANO CYO"}, {"sucursal": "Belgrano", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-06-11", "cantidad": 11, "lote": "7382365", "vto": "2028-01-01", "deposito": "GBELGRANO CYO"}, {"sucursal": "Belgrano", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-06-11", "cantidad": 16, "lote": "7388993", "vto": "2028-01-01", "deposito": "GBELGRANO CYO"}, {"sucursal": "Tandil", "hibrido": "8181", "calibre": "C16", "tecnologia": "PWU", "fecha": "2026-07-01", "cantidad": -100, "lote": "7352869", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8181", "calibre": "R18", "tecnologia": "PWU", "fecha": "2026-07-01", "cantidad": -20, "lote": "7352881", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8380", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-07-01", "cantidad": -27, "lote": "7371328", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-07-01", "cantidad": -223, "lote": "7388992", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8421", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-07-01", "cantidad": -485, "lote": "7405563", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8181", "calibre": "C16", "tecnologia": "PWU", "fecha": "2026-07-01", "cantidad": 100, "lote": "7352869", "vto": "2028-01-01", "deposito": "TANDIL PROPIO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8181", "calibre": "R18", "tecnologia": "PWU", "fecha": "2026-07-01", "cantidad": 20, "lote": "7352881", "vto": "2028-01-01", "deposito": "TANDIL PROPIO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8380", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-07-01", "cantidad": 27, "lote": "7371328", "vto": "2028-01-01", "deposito": "TANDIL PROPIO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-07-01", "cantidad": 223, "lote": "7388992", "vto": "2028-01-01", "deposito": "TANDIL PROPIO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8421", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-07-01", "cantidad": 485, "lote": "7405563", "vto": "2028-01-01", "deposito": "TANDIL PROPIO BASE AEREA"}, {"sucursal": "Azul", "hibrido": "NEXT 22.6", "calibre": "C21", "tecnologia": "PWUE", "fecha": "2026-07-01", "cantidad": 60, "lote": "L268O3SP01", "vto": "2028-07-01", "deposito": "AZUL PROPIO"}, {"sucursal": "Azul", "hibrido": "NEXT 22.6", "calibre": "C21", "tecnologia": "PWUE", "fecha": "2026-07-01", "cantidad": 240, "lote": "L268O6FP03", "vto": "2028-07-01", "deposito": "AZUL PROPIO"}, {"sucursal": "Azul", "hibrido": "NEXT 22.6", "calibre": "C21", "tecnologia": "PWUE", "fecha": "2026-07-01", "cantidad": 40, "lote": "L268P4MP04", "vto": "2028-07-01", "deposito": "AZUL PROPIO"}, {"sucursal": "Azul", "hibrido": "NEXT 22.6", "calibre": "C21", "tecnologia": "PWUE", "fecha": "2026-07-01", "cantidad": 60, "lote": "L287P74P02", "vto": "2028-07-01", "deposito": "AZUL PROPIO"}, {"sucursal": "Azul", "hibrido": "RFG 22", "calibre": "C19", "tecnologia": "RRE", "fecha": "2026-07-01", "cantidad": 40, "lote": "7316977", "vto": "2028-07-01", "deposito": "AZUL PROPIO"}, {"sucursal": "Azul", "hibrido": "8421", "calibre": "R21", "tecnologia": "PWUE", "fecha": "2026-07-01", "cantidad": -221, "lote": "7352550", "vto": "2028-06-05", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "8421", "calibre": "R21", "tecnologia": "PWUE", "fecha": "2026-07-01", "cantidad": -60, "lote": "7353244", "vto": "2028-06-05", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "8421", "calibre": "R21", "tecnologia": "PWUE", "fecha": "2026-07-01", "cantidad": -7, "lote": "7405594", "vto": "2028-06-05", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-07-01", "cantidad": -487, "lote": "7388992", "vto": "2026-06-05", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "8421", "calibre": "R21", "tecnologia": "PWUE", "fecha": "2026-07-01", "cantidad": 221, "lote": "7352550", "vto": "2028-06-05", "deposito": "AZUL PROPIO"}, {"sucursal": "Azul", "hibrido": "8421", "calibre": "R21", "tecnologia": "PWUE", "fecha": "2026-07-01", "cantidad": 60, "lote": "7353244", "vto": "2028-06-05", "deposito": "AZUL PROPIO"}, {"sucursal": "Azul", "hibrido": "8421", "calibre": "R21", "tecnologia": "PWUE", "fecha": "2026-07-01", "cantidad": 7, "lote": "7405594", "vto": "2028-06-05", "deposito": "AZUL PROPIO"}, {"sucursal": "Azul", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-07-01", "cantidad": 487, "lote": "7388992", "vto": "2028-06-05", "deposito": "AZUL PROPIO"}, {"sucursal": "Olavarría", "hibrido": "8380", "calibre": "R21", "tecnologia": "PWUE", "fecha": "2026-07-01", "cantidad": -306, "lote": "7393007", "vto": "2028-06-09", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Olavarría", "hibrido": "8380", "calibre": "R21", "tecnologia": "PWUE", "fecha": "2026-07-01", "cantidad": 306, "lote": "7393007", "vto": "2028-06-09", "deposito": "OLAVARRIA PROPIO"}, {"sucursal": "Olavarría", "hibrido": "NEXT 22.6", "calibre": "C21", "tecnologia": "PWUE", "fecha": "2026-07-01", "cantidad": 60, "lote": "L268O6CP05", "vto": "2028-07-01", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Belgrano", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-07-02", "cantidad": -177, "lote": "7394706", "vto": "2028-01-01", "deposito": "GBELGRANO CYO"}, {"sucursal": "Belgrano", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-07-02", "cantidad": -16, "lote": "7388993", "vto": "2028-01-01", "deposito": "GBELGRANO CYO"}, {"sucursal": "Belgrano", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-07-02", "cantidad": -11, "lote": "7382365", "vto": "2028-01-01", "deposito": "GBELGRANO CYO"}, {"sucursal": "Belgrano", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-07-02", "cantidad": 177, "lote": "7394706", "vto": "2028-01-01", "deposito": "GBELGRANO PROPIO"}, {"sucursal": "Belgrano", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-07-02", "cantidad": 16, "lote": "7388993", "vto": "2028-01-01", "deposito": "GBELGRANO PROPIO"}, {"sucursal": "Belgrano", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-07-02", "cantidad": 11, "lote": "7382365", "vto": "2028-01-01", "deposito": "GBELGRANO PROPIO"}, {"sucursal": "Olavarría", "hibrido": "8380", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-07-14", "cantidad": 12, "lote": "L268P6OL18", "vto": "2027-07-29", "deposito": "OLAVARRIA PROPIO"}, {"sucursal": "Bolívar", "hibrido": "8472", "calibre": "C17", "tecnologia": "PWU", "fecha": "2026-08-06", "cantidad": -4, "lote": "L268O5IC04", "vto": "2026-06-10", "deposito": "BOLIVAR PROPIO"}, {"sucursal": "Bolívar", "hibrido": "8472", "calibre": "C17", "tecnologia": "PWU", "fecha": "2026-08-06", "cantidad": 4, "lote": "L268O5DL06", "vto": "2026-07-02", "deposito": "BOLIVAR PROPIO"}, {"sucursal": "Tandil", "hibrido": "8380", "calibre": "R19", "tecnologia": "PWUE", "fecha": "2026-08-10", "cantidad": 43, "lote": "7494387", "vto": "2028-08-10", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Azul", "hibrido": "8472", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-08-26", "cantidad": -10, "lote": "L268O5AC11", "vto": "2028-06-05", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "8472", "calibre": "C17", "tecnologia": "PWUE", "fecha": "2026-08-26", "cantidad": -897, "lote": "L268O5EC02", "vto": "2028-06-05", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "8472", "calibre": "C17", "tecnologia": "PWU", "fecha": "2026-08-26", "cantidad": 10, "lote": "L268O5AC11", "vto": "2028-06-05", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "8472", "calibre": "C17", "tecnologia": "PWU", "fecha": "2026-08-26", "cantidad": 897, "lote": "L268O5EC02", "vto": "2028-06-05", "deposito": "AZUL CYO"}, {"sucursal": "Tandil", "hibrido": "8380", "calibre": "R19", "tecnologia": "PWUE", "fecha": "2026-08-27", "cantidad": 1, "lote": "7539249", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8380", "calibre": "R19", "tecnologia": "PWUE", "fecha": "2026-08-27", "cantidad": 306, "lote": "7539249", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-09-01", "cantidad": -97, "lote": "7388992", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-09-01", "cantidad": 97, "lote": "7388992", "vto": "2028-01-01", "deposito": "TANDIL PROPIO BASE AEREA"}, {"sucursal": "Belgrano", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-09-01", "cantidad": -97, "lote": "7394706", "vto": "2028-01-01", "deposito": "GBELGRANO PROPIO"}, {"sucursal": "Belgrano", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-09-01", "cantidad": 97, "lote": "7394706", "vto": "2028-01-01", "deposito": "GBELGRANO CYO"}, {"sucursal": "Tandil", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-09-01", "cantidad": -80, "lote": "7388992", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-09-01", "cantidad": 80, "lote": "7388992", "vto": "2028-01-01", "deposito": "TANDIL PROPIO BASE AEREA"}, {"sucursal": "Olavarría", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-09-01", "cantidad": -80, "lote": "7388992", "vto": "2028-06-05", "deposito": "OLAVARRIA PROPIO"}, {"sucursal": "Olavarría", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-09-01", "cantidad": 80, "lote": "7388992", "vto": "2028-06-05", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Olavarría", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-09-01", "cantidad": -9, "lote": "7388992", "vto": "2028-06-05", "deposito": "OLAVARRIA PROPIO"}, {"sucursal": "Olavarría", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-09-01", "cantidad": 9, "lote": "7388992", "vto": "2028-06-05", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Azul", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-09-01", "cantidad": -9, "lote": "7388992", "vto": "2026-06-05", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-09-01", "cantidad": 9, "lote": "7388992", "vto": "2026-06-05", "deposito": "AZUL PROPIO"}, {"sucursal": "Azul", "hibrido": "8380", "calibre": "C21", "tecnologia": "PWUE", "fecha": "2026-09-02", "cantidad": -5, "lote": "L268O5NP05", "vto": "2027-03-29", "deposito": "AZUL PROPIO"}, {"sucursal": "Azul", "hibrido": "8380", "calibre": "C21", "tecnologia": "PWUE", "fecha": "2026-09-02", "cantidad": 5, "lote": "C050N37P05", "vto": "2025-06-06", "deposito": "AZUL PROPIO"}, {"sucursal": "Tandil", "hibrido": "8181", "calibre": "C16", "tecnologia": "PWU", "fecha": "2026-09-03", "cantidad": 30, "lote": "7421442", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8181", "calibre": "C16", "tecnologia": "PWU", "fecha": "2026-09-03", "cantidad": 270, "lote": "7352865", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "RFG 22", "calibre": "R17", "tecnologia": "RRE", "fecha": "2026-09-03", "cantidad": 2, "lote": "7301007", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "RFG 22", "calibre": "R17", "tecnologia": "RRE", "fecha": "2026-09-03", "cantidad": 148, "lote": "7153150", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8472", "calibre": "C18", "tecnologia": "PWUN", "fecha": "2026-09-03", "cantidad": 76, "lote": "L268O5FC04", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8472", "calibre": "C18", "tecnologia": "PWUN", "fecha": "2026-09-03", "cantidad": 9, "lote": "L268O5BL03", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8472", "calibre": "R17", "tecnologia": "PWUN", "fecha": "2026-09-03", "cantidad": 19, "lote": "L268O5IL03", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8472", "calibre": "R17", "tecnologia": "PWUN", "fecha": "2026-09-03", "cantidad": 169, "lote": "L268O5BL03", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8472", "calibre": "R17", "tecnologia": "PWUN", "fecha": "2026-09-03", "cantidad": 72, "lote": "L268O5AC14", "vto": "2028-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Azul", "hibrido": "8181", "calibre": "C16", "tecnologia": "PWU", "fecha": "2026-09-03", "cantidad": 300, "lote": "7417299", "vto": "2028-09-03", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-09-03", "cantidad": 496, "lote": "7539243", "vto": "2028-09-03", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-09-03", "cantidad": 504, "lote": "7552498", "vto": "2028-09-03", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "8380", "calibre": "C19", "tecnologia": "PWUE", "fecha": "2026-09-03", "cantidad": 1, "lote": "7539209", "vto": "2028-09-03", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "8380", "calibre": "C19", "tecnologia": "PWUE", "fecha": "2026-09-03", "cantidad": 67, "lote": "7565840", "vto": "2028-09-03", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "8380", "calibre": "C19", "tecnologia": "PWUE", "fecha": "2026-09-03", "cantidad": 432, "lote": "7565842", "vto": "2028-09-03", "deposito": "AZUL CYO"}, {"sucursal": "Olavarría", "hibrido": "8472", "calibre": "SPR", "tecnologia": "PWUE", "fecha": "2026-09-03", "cantidad": 200, "lote": "6968646", "vto": "2028-09-03", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Olavarría", "hibrido": "8181", "calibre": "R16", "tecnologia": "PWU", "fecha": "2026-09-03", "cantidad": 9, "lote": "7352890", "vto": "2028-09-03", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Olavarría", "hibrido": "8181", "calibre": "R16", "tecnologia": "PWU", "fecha": "2026-09-03", "cantidad": 990, "lote": "7352885", "vto": "2028-09-03", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Olavarría", "hibrido": "8181", "calibre": "R16", "tecnologia": "PWU", "fecha": "2026-09-03", "cantidad": 1, "lote": "7352893", "vto": "2028-09-03", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Olavarría", "hibrido": "RFG 22", "calibre": "R17", "tecnologia": "RRE", "fecha": "2026-09-03", "cantidad": 150, "lote": "7153150", "vto": "2028-09-03", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Bolívar", "hibrido": "RFG 22", "calibre": "C19", "tecnologia": "RRE", "fecha": "2026-09-03", "cantidad": -10, "lote": "7316977", "vto": "2028-07-01", "deposito": "BOLIVAR PROPIO"}, {"sucursal": "Bolívar", "hibrido": "RFG 22", "calibre": "C19", "tecnologia": "RRE", "fecha": "2026-09-03", "cantidad": 10, "lote": "7316977", "vto": "2028-07-01", "deposito": "BOLIVAR CYO"}, {"sucursal": "Olavarría", "hibrido": "RFG 22", "calibre": "C19", "tecnologia": "RRE", "fecha": "2026-09-03", "cantidad": -10, "lote": "7276752", "vto": "2028-01-01", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Olavarría", "hibrido": "RFG 22", "calibre": "C19", "tecnologia": "RRE", "fecha": "2026-09-03", "cantidad": 10, "lote": "7276752", "vto": "2028-01-01", "deposito": "OLAVARRIA PROPIO"}, {"sucursal": "Tandil", "hibrido": "8380", "calibre": "R19", "tecnologia": "PWUE", "fecha": "2026-09-07", "cantidad": -2, "lote": "L020N5UL12", "vto": "2025-01-01", "deposito": "TANDIL PROPIO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8380", "calibre": "R19", "tecnologia": "PWUE", "fecha": "2026-09-07", "cantidad": 2, "lote": "L020N5UL12", "vto": "2025-01-01", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Olavarría", "hibrido": "8380", "calibre": "R19", "tecnologia": "PWUE", "fecha": "2026-09-07", "cantidad": -2, "lote": "7539249", "vto": "2028-01-01", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Olavarría", "hibrido": "8380", "calibre": "R19", "tecnologia": "PWUE", "fecha": "2026-09-07", "cantidad": 2, "lote": "7539249", "vto": "2028-01-01", "deposito": "OLAVARRIA PROPIO"}, {"sucursal": "Azul", "hibrido": "8380", "calibre": "R19", "tecnologia": "PWUE", "fecha": "2026-09-07", "cantidad": 100, "lote": "7552487", "vto": "2028-09-07", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "RFG 22", "calibre": "R17", "tecnologia": "RRE", "fecha": "2026-09-07", "cantidad": 6, "lote": "7301007", "vto": "2028-09-07", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "RFG 22", "calibre": "R17", "tecnologia": "RRE", "fecha": "2026-09-07", "cantidad": 144, "lote": "7155581", "vto": "2028-09-07", "deposito": "AZUL CYO"}, {"sucursal": "Tandil", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-09-08", "cantidad": -4, "lote": "7552498", "vto": "2028-09-03", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-09-08", "cantidad": 4, "lote": "7552498", "vto": "2028-09-03", "deposito": "TANDIL PROPIO BASE AEREA"}, {"sucursal": "Bolívar", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-09-08", "cantidad": -4, "lote": "7388992", "vto": "2028-06-05", "deposito": "BOLIVAR PROPIO"}, {"sucursal": "Bolívar", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-09-08", "cantidad": 4, "lote": "7388992", "vto": "2028-06-05", "deposito": "BOLIVAR CYO"}, {"sucursal": "Tandil", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-09-08", "cantidad": -1, "lote": "7552498", "vto": "2028-09-03", "deposito": "TANDIL CYO BASE AEREA"}, {"sucursal": "Tandil", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-09-08", "cantidad": 1, "lote": "7552498", "vto": "2028-09-03", "deposito": "TANDIL PROPIO BASE AEREA"}, {"sucursal": "Azul", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-09-08", "cantidad": -1, "lote": "7388992", "vto": "2028-06-05", "deposito": "AZUL PROPIO"}, {"sucursal": "Azul", "hibrido": "8380", "calibre": "R17", "tecnologia": "PWUE", "fecha": "2026-09-08", "cantidad": 1, "lote": "7388992", "vto": "2028-06-05", "deposito": "AZUL CYO"}, {"sucursal": "Azul", "hibrido": "8380", "calibre": "C19", "tecnologia": "PWUE", "fecha": "2026-09-08", "cantidad": -7, "lote": "L020O2FL02", "vto": "2026-05-31", "deposito": "AZUL PROPIO"}, {"sucursal": "Azul", "hibrido": "8380", "calibre": "C19", "tecnologia": "PWUE", "fecha": "2026-09-08", "cantidad": 7, "lote": "L020O2FL02", "vto": "2026-05-31", "deposito": "AZUL CYO"}, {"sucursal": "Olavarría", "hibrido": "8380", "calibre": "C19", "tecnologia": "PWUE", "fecha": "2026-09-08", "cantidad": -7, "lote": "7565842", "vto": "2028-09-03", "deposito": "OLAVARRIA CYO"}, {"sucursal": "Olavarría", "hibrido": "8380", "calibre": "C19", "tecnologia": "PWUE", "fecha": "2026-09-08", "cantidad": 7, "lote": "7565842", "vto": "2028-09-03", "deposito": "OLAVARRIA PROPIO"}, {"sucursal": "Azul", "hibrido": "8380", "calibre": "C19", "tecnologia": "PWUE", "fecha": "2026-09-08", "cantidad": -1, "lote": "L268O5NL04", "vto": "2026-09-12", "deposito": "AZUL PROPIO"}, {"sucursal": "Azul", "hibrido": "8380", "calibre": "C19", "tecnologia": "PWUE", "fecha": "2026-09-08", "cantidad": 1, "lote": "L268O5NL04", "vto": "2026-09-12", "deposito": "AZUL CYO"}, {"sucursal": "Bolívar", "hibrido": "8380", "calibre": "C19", "tecnologia": "PWUE", "fecha": "2026-09-08", "cantidad": -1, "lote": "7565842", "vto": "2028-09-03", "deposito": "BOLIVAR CYO"}, {"sucursal": "Bolívar", "hibrido": "8380", "calibre": "C19", "tecnologia": "PWUE", "fecha": "2026-09-08", "cantidad": 1, "lote": "7565842", "vto": "2028-09-03", "deposito": "BOLIVAR PROPIO"}, {"sucursal": "Belgrano", "hibrido": "8472", "calibre": "SPC", "tecnologia": "PWUE", "fecha": "2026-09-11", "cantidad": 122, "lote": "L268059P02", "vto": "2028-01-01", "deposito": "GBELGRANO CYO"}, {"sucursal": "Belgrano", "hibrido": "8472", "calibre": "SPR", "tecnologia": "PWUE", "fecha": "2026-09-11", "cantidad": 135, "lote": "6968646", "vto": "2028-01-01", "deposito": "GBELGRANO CYO"}, {"sucursal": "Belgrano", "hibrido": "8181", "calibre": "R16", "tecnologia": "PWU", "fecha": "2026-09-11", "cantidad": 90, "lote": "7420853", "vto": "2028-01-01", "deposito": "GBELGRANO CYO"}, {"sucursal": "Belgrano", "hibrido": "8181", "calibre": "R16", "tecnologia": "PWU", "fecha": "2026-09-11", "cantidad": 40, "lote": "7533466", "vto": "2028-01-01", "deposito": "GBELGRANO CYO"}];
+const FORECAST = [{"sucursal": "Azul", "hibrido": "NEXT 22.6", "forecast": 1078.0}, {"sucursal": "Belgrano", "hibrido": "NEXT 22.6", "forecast": 80.0}, {"sucursal": "Bolívar", "hibrido": "NEXT 22.6", "forecast": 0.0}, {"sucursal": "Olavarría", "hibrido": "NEXT 22.6", "forecast": 157.0}, {"sucursal": "Tandil", "hibrido": "NEXT 22.6", "forecast": 50.0}, {"sucursal": "Azul", "hibrido": "8380", "forecast": 1531.0}, {"sucursal": "Belgrano", "hibrido": "8380", "forecast": 1062.0}, {"sucursal": "Bolívar", "hibrido": "8380", "forecast": 1282.0}, {"sucursal": "Olavarría", "hibrido": "8380", "forecast": 962.0}, {"sucursal": "Tandil", "hibrido": "8380", "forecast": 2838.0}, {"sucursal": "Azul", "hibrido": "8421", "forecast": 390.0}, {"sucursal": "Belgrano", "hibrido": "8421", "forecast": 200.0}, {"sucursal": "Bolívar", "hibrido": "8421", "forecast": 370.0}, {"sucursal": "Olavarría", "hibrido": "8421", "forecast": 185.0}, {"sucursal": "Tandil", "hibrido": "8421", "forecast": 100.0}, {"sucursal": "Azul", "hibrido": "8472", "forecast": 120.0}, {"sucursal": "Belgrano", "hibrido": "8472", "forecast": 220.0}, {"sucursal": "Bolívar", "hibrido": "8472", "forecast": 962.0}, {"sucursal": "Olavarría", "hibrido": "8472", "forecast": 399.0}, {"sucursal": "Tandil", "hibrido": "8472", "forecast": 317.0}, {"sucursal": "Azul", "hibrido": "8181", "forecast": 350.0}, {"sucursal": "Belgrano", "hibrido": "8181", "forecast": 275.0}, {"sucursal": "Bolívar", "hibrido": "8181", "forecast": 0.0}, {"sucursal": "Olavarría", "hibrido": "8181", "forecast": 530.0}, {"sucursal": "Tandil", "hibrido": "8181", "forecast": 110.0}, {"sucursal": "Azul", "hibrido": "RFG 22", "forecast": 1055.0}, {"sucursal": "Belgrano", "hibrido": "RFG 22", "forecast": 343.0}, {"sucursal": "Bolívar", "hibrido": "RFG 22", "forecast": 0.0}, {"sucursal": "Olavarría", "hibrido": "RFG 22", "forecast": 128.0}, {"sucursal": "Tandil", "hibrido": "RFG 22", "forecast": 367.0}];
+const SALES = [{"sucursal": "Azul", "hibrido": "8181", "facturado": 0.0, "pendiente": 0.0, "vendido": 0.0}, {"sucursal": "Azul", "hibrido": "8380", "facturado": 707.0, "pendiente": 0.0, "vendido": 707.0}, {"sucursal": "Azul", "hibrido": "8421", "facturado": 273.0, "pendiente": 0.0, "vendido": 273.0}, {"sucursal": "Azul", "hibrido": "8472", "facturado": 0.0, "pendiente": 0.0, "vendido": 0.0}, {"sucursal": "Azul", "hibrido": "NEXT 22.6", "facturado": 226.0, "pendiente": 145.0, "vendido": 371.0}, {"sucursal": "Azul", "hibrido": "RFG 22", "facturado": 263.0, "pendiente": 205.0, "vendido": 468.0}, {"sucursal": "Belgrano", "hibrido": "8181", "facturado": 221.0, "pendiente": 0.0, "vendido": 221.0}, {"sucursal": "Belgrano", "hibrido": "8380", "facturado": 539.0, "pendiente": 0.0, "vendido": 539.0}, {"sucursal": "Belgrano", "hibrido": "8421", "facturado": 153.0, "pendiente": 0.0, "vendido": 153.0}, {"sucursal": "Belgrano", "hibrido": "8472", "facturado": 538.0, "pendiente": 0.0, "vendido": 538.0}, {"sucursal": "Belgrano", "hibrido": "NEXT 22.6", "facturado": 0.0, "pendiente": 0.0, "vendido": 0.0}, {"sucursal": "Belgrano", "hibrido": "RFG 22", "facturado": 108.0, "pendiente": 0.0, "vendido": 108.0}, {"sucursal": "Bolívar", "hibrido": "8181", "facturado": 0.0, "pendiente": 0.0, "vendido": 0.0}, {"sucursal": "Bolívar", "hibrido": "8380", "facturado": 456.0, "pendiente": 76.0, "vendido": 532.0}, {"sucursal": "Bolívar", "hibrido": "8421", "facturado": 26.0, "pendiente": 0.0, "vendido": 26.0}, {"sucursal": "Bolívar", "hibrido": "8472", "facturado": 971.0, "pendiente": 267.0, "vendido": 1238.0}, {"sucursal": "Bolívar", "hibrido": "NEXT 22.6", "facturado": 2.0, "pendiente": 0.0, "vendido": 2.0}, {"sucursal": "Bolívar", "hibrido": "RFG 22", "facturado": 88.0, "pendiente": 3.0, "vendido": 91.0}, {"sucursal": "Olavarría", "hibrido": "8181", "facturado": 245.0, "pendiente": 11.0, "vendido": 256.0}, {"sucursal": "Olavarría", "hibrido": "8380", "facturado": 331.0, "pendiente": 0.0, "vendido": 331.0}, {"sucursal": "Olavarría", "hibrido": "8421", "facturado": 10.0, "pendiente": 0.0, "vendido": 10.0}, {"sucursal": "Olavarría", "hibrido": "8472", "facturado": 288.0, "pendiente": 0.0, "vendido": 288.0}, {"sucursal": "Olavarría", "hibrido": "NEXT 22.6", "facturado": 79.0, "pendiente": 0.0, "vendido": 79.0}, {"sucursal": "Olavarría", "hibrido": "RFG 22", "facturado": 70.0, "pendiente": 0.0, "vendido": 70.0}, {"sucursal": "Tandil", "hibrido": "8181", "facturado": 80.0, "pendiente": 90.0, "vendido": 170.0}, {"sucursal": "Tandil", "hibrido": "8380", "facturado": 731.0, "pendiente": 201.0, "vendido": 932.0}, {"sucursal": "Tandil", "hibrido": "8421", "facturado": 6.0, "pendiente": 0.0, "vendido": 6.0}, {"sucursal": "Tandil", "hibrido": "8472", "facturado": 228.0, "pendiente": 0.0, "vendido": 228.0}, {"sucursal": "Tandil", "hibrido": "NEXT 22.6", "facturado": 90.0, "pendiente": 0.0, "vendido": 90.0}, {"sucursal": "Tandil", "hibrido": "RFG 22", "facturado": 214.0, "pendiente": 33.0, "vendido": 247.0}];
+const OA = [{"hibrido": "8380", "oa_pendiente": 0}, {"hibrido": "8472", "oa_pendiente": 697}, {"hibrido": "RFG 22", "oa_pendiente": 100}];
+const OBJETIVO = [{"sucursal": "Tandil", "objetivo": 4802, "forecastActual": 3782, "ventas2025": 4678, "brecha": -1020, "vs2025": -896}, {"sucursal": "Azul", "objetivo": 5082, "forecastActual": 4514, "ventas2025": 4235, "brecha": -568, "vs2025": 279}, {"sucursal": "Bolívar", "objetivo": 2716, "forecastActual": 2614, "ventas2025": 2198, "brecha": -102, "vs2025": 416}, {"sucursal": "Olavarría", "objetivo": 2952, "forecastActual": 2361, "ventas2025": 2460, "brecha": -591, "vs2025": -99}, {"sucursal": "Belgrano", "objetivo": 2798, "forecastActual": 2130, "ventas2025": 2244, "brecha": -668, "vs2025": -114}];
+
+// ============================================================
+// TAB SWITCHING
+// ============================================================
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    if(btn.disabled) return;
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tabpanel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+  });
+});
+
+function unique(arr, key){ return [...new Set(arr.map(r=>r[key]))].sort(); }
+
+// ============================================================
+// TAB 1: RECIBIDO  (unchanged behaviour from previous version)
+// ============================================================
+let filters = { sucursal:'', hibrido:'', deposito:'' };
+let sort = { key:'fecha', dir:-1 };
+
+function fillSelect(id, values){
+  const sel = document.getElementById(id);
+  values.forEach(v=>{
+    const o = document.createElement('option');
+    o.value = v; o.textContent = v;
+    sel.appendChild(o);
+  });
+}
+fillSelect('f-sucursal', unique(RAW,'sucursal'));
+fillSelect('f-hibrido', unique(RAW,'hibrido'));
+fillSelect('f-deposito', unique(RAW,'deposito'));
+
+['sucursal','hibrido','deposito'].forEach(k=>{
+  document.getElementById('f-'+k).addEventListener('change', e=>{
+    filters[k] = e.target.value;
+    render();
+  });
+});
+document.getElementById('reset').addEventListener('click', ()=>{
+  filters = { sucursal:'', hibrido:'', deposito:'' };
+  document.getElementById('f-sucursal').value='';
+  document.getElementById('f-hibrido').value='';
+  document.getElementById('f-deposito').value='';
+  render();
+});
+
+function applyFilters(){
+  return RAW.filter(r=>
+    (!filters.sucursal || r.sucursal===filters.sucursal) &&
+    (!filters.hibrido || r.hibrido===filters.hibrido) &&
+    (!filters.deposito || r.deposito===filters.deposito)
+  );
+}
+
+const allDates = RAW.map(r=>r.fecha).sort();
+document.getElementById('meta-date').textContent = allDates[allDates.length-1];
+document.getElementById('meta-rows').textContent = RAW.length;
+
+function renderKPIs(data){
+  const total = data.reduce((s,r)=>s+r.cantidad,0);
+  const positivos = data.filter(r=>r.cantidad>0).reduce((s,r)=>s+r.cantidad,0);
+  const transferencias = data.filter(r=>r.cantidad<0).reduce((s,r)=>s+Math.abs(r.cantidad),0);
+  const sucursalTotals = {};
+  data.forEach(r=>{ sucursalTotals[r.sucursal] = (sucursalTotals[r.sucursal]||0) + r.cantidad; });
+  const allSucursales = unique(RAW,'sucursal');
+  const faltantes = allSucursales.filter(s=>!(s in sucursalTotals) || sucursalTotals[s]<=0);
+  const hibridosActivos = unique(data,'hibrido').length;
+
+  const kpis = document.getElementById('kpis');
+  kpis.innerHTML = '';
+  const cards = [
+    { label:'Total neto recibido', value: total.toLocaleString('es-AR'), unit:'bolsas', foot: positivos.toLocaleString('es-AR')+' bolsas ingresadas brutas', alert:false },
+    { label:'Movido en transferencias', value: transferencias.toLocaleString('es-AR'), unit:'bolsas', foot:'entre depósitos CYO / propio', alert:false },
+    { label:'Híbridos con movimiento', value: hibridosActivos, unit:'de '+unique(RAW,'hibrido').length, foot:'en el filtro actual', alert:false },
+    { label:'Sucursales sin recepción neta', value: faltantes.length, unit:'de '+allSucursales.length, foot: faltantes.length ? faltantes.join(', ') : 'todas recibieron stock', alert: faltantes.length>0 },
+  ];
+  cards.forEach(c=>{
+    const div = document.createElement('div');
+    div.className = 'kpi' + (c.alert?' alert':'');
+    div.innerHTML = `<div class="label">${c.label}</div><div class="value">${c.value}<small>${c.unit}</small></div><div class="foot">${c.foot}</div>`;
+    kpis.appendChild(div);
+  });
+}
+
+function renderSucursalChart(data){
+  const totals = {};
+  unique(RAW,'sucursal').forEach(s=>totals[s]=0);
+  data.forEach(r=>{ totals[r.sucursal] = (totals[r.sucursal]||0) + r.cantidad; });
+  const entries = Object.entries(totals).sort((a,b)=>b[1]-a[1]);
+  const max = Math.max(1, ...entries.map(e=>Math.abs(e[1])));
+  const el = document.getElementById('chart-sucursal');
+  el.innerHTML = '';
+  entries.forEach(([name,val])=>{
+    const pct = Math.max(2, Math.round(Math.abs(val)/max*100));
+    const row = document.createElement('div');
+    row.className = 'barrow';
+    row.innerHTML = `<div class="name">${name}</div>
+      <div class="track"><div class="fill ${val<=0?'zero':''}" style="width:${val<=0?3:pct}%"></div></div>
+      <div class="val">${val.toLocaleString('es-AR')}</div>`;
+    el.appendChild(row);
+  });
+}
+
+function renderHibridoChart(data){
+  const totals = {};
+  data.forEach(r=>{ totals[r.hibrido] = (totals[r.hibrido]||0) + r.cantidad; });
+  const entries = Object.entries(totals).filter(e=>e[1]!==0).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  const el = document.getElementById('chart-hibrido');
+  el.innerHTML = '';
+  if(!entries.length){ el.innerHTML = '<div class="empty-state">Sin movimientos netos en este filtro</div>'; return; }
+  const oaMap = oaByHibrido();
+  const max = Math.max(1, ...entries.map(([name,val])=>Math.abs(val)+(oaMap[name]||0)));
+  entries.forEach(([name,val])=>{
+    const oa = oaMap[name] || 0;
+    const pct = Math.max(2, Math.round(Math.abs(val)/max*100));
+    const oaPct = oa>0 ? Math.max(1, Math.round(oa/max*100)) : 0;
+    const row = document.createElement('div');
+    row.className = 'barrow';
+    row.innerHTML = `<div class="name" title="${name}">${name}</div>
+      <div class="track"><div class="fill ${oa>0?'':'solo'}" style="width:${pct}%"></div>${oa>0?`<div class="fill-oa" style="width:${oaPct}%"></div>`:''}</div>
+      <div class="val">${val.toLocaleString('es-AR')}${oa>0?`<small>+${Math.round(oa).toLocaleString('es-AR')} OA</small>`:''}</div>`;
+    el.appendChild(row);
+  });
+}
+
+function renderTimeline(data){
+  const svg = document.getElementById('timeline');
+  const tooltip = document.getElementById('tl-tooltip');
+  svg.innerHTML = '';
+  if(!data.length){ return; }
+
+  const byDate = {};
+  data.forEach(r=>{ byDate[r.fecha] = (byDate[r.fecha]||0) + r.cantidad; });
+  const dates = Object.keys(byDate).sort();
+  let cum = 0;
+  const points = dates.map(d=>{ cum += byDate[d]; return { date:d, value:cum }; });
+
+  const W = 1080, H = 220, padL = 44, padR = 16, padT = 16, padB = 28;
+  const minV = Math.min(0, ...points.map(p=>p.value));
+  const maxV = Math.max(1, ...points.map(p=>p.value));
+  const xScale = i => padL + (i/(Math.max(1,points.length-1))) * (W-padL-padR);
+  const yScale = v => padT + (1 - (v-minV)/(maxV-minV || 1)) * (H-padT-padB);
+
+  const ns = 'http://www.w3.org/2000/svg';
+
+  const gridLines = 4;
+  for(let g=0; g<=gridLines; g++){
+    const v = minV + (maxV-minV)*g/gridLines;
+    const y = yScale(v);
+    const line = document.createElementNS(ns,'line');
+    line.setAttribute('x1', padL); line.setAttribute('x2', W-padR);
+    line.setAttribute('y1', y); line.setAttribute('y2', y);
+    line.setAttribute('stroke', '#2B3D31'); line.setAttribute('stroke-width','1');
+    svg.appendChild(line);
+    const label = document.createElementNS(ns,'text');
+    label.setAttribute('x', 6); label.setAttribute('y', y+4);
+    label.setAttribute('fill', '#6E8577'); label.setAttribute('font-size','10');
+    label.setAttribute('font-family','Inter, sans-serif');
+    label.textContent = Math.round(v).toLocaleString('es-AR');
+    svg.appendChild(label);
+  }
+
+  let d = `M ${xScale(0)} ${yScale(points[0].value)}`;
+  points.forEach((p,i)=>{ if(i>0) d += ` L ${xScale(i)} ${yScale(p.value)}`; });
+  const areaD = d + ` L ${xScale(points.length-1)} ${yScale(0)} L ${xScale(0)} ${yScale(0)} Z`;
+
+  const defs = document.createElementNS(ns,'defs');
+  defs.innerHTML = `<linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#D9A441" stop-opacity="0.35"/>
+    <stop offset="100%" stop-color="#D9A441" stop-opacity="0"/>
+  </linearGradient>`;
+  svg.appendChild(defs);
+
+  const area = document.createElementNS(ns,'path');
+  area.setAttribute('d', areaD);
+  area.setAttribute('fill', 'url(#areaGrad)');
+  svg.appendChild(area);
+
+  const line = document.createElementNS(ns,'path');
+  line.setAttribute('d', d);
+  line.setAttribute('fill','none');
+  line.setAttribute('stroke','#D9A441');
+  line.setAttribute('stroke-width','2');
+  svg.appendChild(line);
+
+  points.forEach((p,i)=>{
+    const cx = xScale(i), cy = yScale(p.value);
+    const dot = document.createElementNS(ns,'circle');
+    dot.setAttribute('cx',cx); dot.setAttribute('cy',cy); dot.setAttribute('r','3');
+    dot.setAttribute('fill','#132018'); dot.setAttribute('stroke','#D9A441'); dot.setAttribute('stroke-width','1.5');
+    svg.appendChild(dot);
+
+    const hit = document.createElementNS(ns,'circle');
+    hit.setAttribute('cx',cx); hit.setAttribute('cy',cy); hit.setAttribute('r','10');
+    hit.setAttribute('fill','transparent');
+    hit.style.cursor = 'pointer';
+    hit.addEventListener('mousemove', (ev)=>{
+      const rect = svg.getBoundingClientRect();
+      const scaleX = rect.width / W;
+      tooltip.style.display = 'block';
+      tooltip.style.left = (cx*scaleX + 8) + 'px';
+      tooltip.style.top = (cy - 8) + 'px';
+      tooltip.textContent = p.date + ' · ' + p.value.toLocaleString('es-AR') + ' bolsas acum.';
+    });
+    hit.addEventListener('mouseleave', ()=>{ tooltip.style.display='none'; });
+    svg.appendChild(hit);
+  });
+
+  [0, Math.floor(points.length/2), points.length-1].forEach(i=>{
+    const label = document.createElementNS(ns,'text');
+    label.setAttribute('x', xScale(i));
+    label.setAttribute('y', H-8);
+    label.setAttribute('fill','#6E8577');
+    label.setAttribute('font-size','10');
+    label.setAttribute('font-family','Inter, sans-serif');
+    label.setAttribute('text-anchor', i===0?'start':(i===points.length-1?'end':'middle'));
+    label.textContent = points[i].date;
+    svg.appendChild(label);
+  });
+}
+
+function renderTable(data){
+  const sorted = [...data].sort((a,b)=>{
+    let av=a[sort.key], bv=b[sort.key];
+    if(sort.key==='cantidad'){ av=Number(av); bv=Number(bv); }
+    if(av<bv) return -1*sort.dir;
+    if(av>bv) return 1*sort.dir;
+    return 0;
+  });
+  const tbody = document.getElementById('tbody');
+  tbody.innerHTML = '';
+  sorted.forEach(r=>{
+    const tr = document.createElement('tr');
+    const cls = r.cantidad>0?'pos':(r.cantidad<0?'neg':'');
+    tr.innerHTML = `<td>${r.fecha}</td><td>${r.sucursal}</td><td>${r.hibrido}</td><td>${r.calibre}</td><td>${r.tecnologia}</td><td>${r.deposito}</td>
+      <td class="num ${cls}">${r.cantidad>0?'+':''}${r.cantidad.toLocaleString('es-AR')}</td>
+      <td>${r.lote}</td><td>${r.vto}</td>`;
+    tbody.appendChild(tr);
+  });
+  document.getElementById('rowcount').textContent = sorted.length + ' movimientos';
+}
+
+document.querySelectorAll('#tab-recibido thead th').forEach(th=>{
+  th.addEventListener('click', ()=>{
+    const key = th.dataset.key;
+    if(sort.key===key){ sort.dir *= -1; } else { sort.key=key; sort.dir=1; }
+    document.querySelectorAll('#tab-recibido thead th .arrow').forEach(a=>a.textContent='');
+    th.querySelector('.arrow').textContent = sort.dir===1?'▲':'▼';
+    render();
+  });
+});
+
+function render(){
+  const data = applyFilters();
+  renderKPIs(data);
+  renderSucursalChart(data);
+  renderHibridoChart(data);
+  renderTimeline(data);
+  renderTable(data);
+}
+render();
+
+// ============================================================
+// TAB 2: FORECAST VS RECIBIDO
+// ============================================================
+let fcFilters = { sucursal:'' };
+let fcSort = { key:'delta', dir:1 };
+
+fillSelect('fc-f-sucursal', unique(FORECAST,'sucursal'));
+document.getElementById('fc-f-sucursal').addEventListener('change', e=>{
+  fcFilters.sucursal = e.target.value;
+  renderForecastTab();
+});
+document.getElementById('fc-reset').addEventListener('click', ()=>{
+  fcFilters = { sucursal:'' };
+  document.getElementById('fc-f-sucursal').value = '';
+  renderForecastTab();
+});
+
+// build recibido totals by sucursal+hibrido (net, all dates — total campaign to date)
+function recibidoBySucursalHibrido(){
+  const map = {};
+  RAW.forEach(r=>{
+    const key = r.sucursal+'|'+r.hibrido;
+    map[key] = (map[key]||0) + r.cantidad;
+  });
+  return map;
+}
+
+function buildMatrix(){
+  const recMap = recibidoBySucursalHibrido();
+  return FORECAST.map(f=>{
+    const key = f.sucursal+'|'+f.hibrido;
+    const recibido = recMap[key] || 0;
+    const delta = recibido - f.forecast;
+    const pct = f.forecast>0 ? (recibido/f.forecast*100) : (recibido>0?999:0);
+    let estado = 'ontrack';
+    if(f.forecast>0 && pct < 90) estado='under';
+    else if(f.forecast>0 && pct > 110) estado='over';
+    else if(f.forecast===0 && recibido>0) estado='over';
+    else if(f.forecast===0 && recibido===0) estado='ontrack';
+    return { sucursal:f.sucursal, hibrido:f.hibrido, forecast:f.forecast, recibido, delta, pct, estado };
+  });
+}
+
+function applyFcFilters(matrix){
+  return matrix.filter(r=> !fcFilters.sucursal || r.sucursal===fcFilters.sucursal);
+}
+
+function oaByHibrido(){
+  const map = {};
+  OA.forEach(o=>{ map[o.hibrido] = (map[o.hibrido]||0) + o.oa_pendiente; });
+  return map;
+}
+
+function renderFcKPIs(matrix){
+  const totalFc = matrix.reduce((s,r)=>s+r.forecast,0);
+  const totalRec = matrix.reduce((s,r)=>s+r.recibido,0);
+  const delta = totalRec - totalFc;
+  const pct = totalFc>0 ? (totalRec/totalFc*100) : 0;
+  const underCount = matrix.filter(r=>r.estado==='under').length;
+
+  const oaMap = oaByHibrido();
+  const hibridosInFilter = new Set(matrix.map(r=>r.hibrido));
+  const totalOA = [...hibridosInFilter].reduce((s,h)=>s+(oaMap[h]||0),0);
+  const deltaAdj = (totalRec+totalOA) - totalFc;
+  const pctAdj = totalFc>0 ? ((totalRec+totalOA)/totalFc*100) : 0;
+
+  const kpis = document.getElementById('fc-kpis');
+  kpis.innerHTML = '';
+  const cards = [
+    { label:'Forecast total', value: Math.round(totalFc).toLocaleString('es-AR'), unit:'bolsas', foot:'suma de clientes cargados', alert:false },
+    { label:'Recibido a la fecha', value: totalRec.toLocaleString('es-AR'), unit:'bolsas', foot:'neto, todas las sucursales del filtro', alert:false, good:true },
+    { label:'OA pendiente de recibir', value: Math.round(totalOA).toLocaleString('es-AR'), unit:'bolsas', foot:'pedidos ya hechos a Corteva, a nivel compañía', alert:false },
+    { label:'Brecha vs. forecast', value: (delta>=0?'+':'')+delta.toLocaleString('es-AR'), unit:'bolsas', foot: delta<0 ? 'falta traer para cubrir lo forecasteado' : 'por encima de lo forecasteado', alert: delta<0 },
+    { label:'Brecha ajustada (recibido + OA)', value: (deltaAdj>=0?'+':'')+Math.round(deltaAdj).toLocaleString('es-AR'), unit:'bolsas', foot: deltaAdj<0 ? 'aún falta pedir, ni sumando el OA alcanza' : 'se cubre el forecast con lo ya pedido', alert: deltaAdj<0, good: deltaAdj>=0 },
+    { label:'Cumplimiento ajustado', value: Math.round(pctAdj)+'%', unit:'', foot: 'recibido + OA sobre forecast · '+underCount+' combinaciones bajo 90% sin OA', alert: pctAdj<90 },
+  ];
+  cards.forEach(c=>{
+    const div = document.createElement('div');
+    div.className = 'kpi' + (c.alert?' alert':(c.good?' good':''));
+    div.innerHTML = `<div class="label">${c.label}</div><div class="value">${c.value}<small>${c.unit}</small></div><div class="foot">${c.foot}</div>`;
+    kpis.appendChild(div);
+  });
+}
+
+function renderFcCallout(matrix){
+  const el = document.getElementById('fc-callout');
+  const zeroReceived = matrix.filter(r=>r.forecast>0 && r.recibido<=0);
+  if(!zeroReceived.length){ el.innerHTML=''; return; }
+  const bySucursal = {};
+  zeroReceived.forEach(r=>{ bySucursal[r.sucursal] = (bySucursal[r.sucursal]||0) + r.forecast; });
+  const parts = Object.entries(bySucursal).sort((a,b)=>b[1]-a[1])
+    .map(([s,v])=>`${s} (${Math.round(v).toLocaleString('es-AR')} bolsas)`).join(', ');
+  el.innerHTML = `<div class="callout"><b>Sin recepción todavía:</b> hay combinaciones sucursal-híbrido con forecast cargado y cero bolsas recibidas en: ${parts}.</div>`;
+}
+
+function renderFcCompareChart(matrix, groupKey, elId, showOA){
+  const totals = {};
+  matrix.forEach(r=>{
+    if(!totals[r[groupKey]]) totals[r[groupKey]] = { forecast:0, recibido:0 };
+    totals[r[groupKey]].forecast += r.forecast;
+    totals[r[groupKey]].recibido += r.recibido;
+  });
+  const oaMap = showOA ? oaByHibrido() : {};
+  const entries = Object.entries(totals).sort((a,b)=>b[1].forecast-a[1].forecast);
+  const el = document.getElementById(elId);
+  el.innerHTML = '';
+  if(!entries.length){ el.innerHTML='<div class="empty-state">Sin datos en este filtro</div>'; return; }
+  const oa0 = showOA ? entries.map(([name])=>oaMap[name]||0) : entries.map(()=>0);
+  const max = Math.max(1, ...entries.map(([name],i)=>Math.max(totals[name].forecast, totals[name].recibido+oa0[i])));
+  entries.forEach(([name, v], i)=>{
+    const oa = oa0[i];
+    const pct = v.forecast>0 ? (v.recibido/v.forecast*100) : (v.recibido>0?999:0);
+    const barPct = Math.min(100, Math.max(2, Math.round(v.recibido/max*100)));
+    const oaPct = Math.min(100-barPct, Math.round(oa/max*100));
+    const markPct = Math.min(100, Math.round(v.forecast/max*100));
+    let cls = 'ontrack';
+    if(v.forecast>0 && pct<90) cls='under';
+    else if(v.forecast>0 && pct>110) cls='over';
+    const row = document.createElement('div');
+    row.className = 'cmprow';
+    row.innerHTML = `<div class="name">${name}</div>
+      <div class="track">
+        <div class="fill ${cls}" style="width:${barPct}%"></div>
+        ${oa>0 ? `<div class="fill-oa" style="left:${barPct}%;width:${oaPct}%"></div>` : ''}
+        <div class="fc-mark" style="left:${markPct}%"></div>
+      </div>
+      <div class="pct">${Math.round(pct)}%<small>${v.recibido.toLocaleString('es-AR')}${oa>0?' +'+Math.round(oa).toLocaleString('es-AR')+' OA':''} / ${Math.round(v.forecast).toLocaleString('es-AR')}</small></div>`;
+    el.appendChild(row);
+  });
+}
+
+function renderOaTable(matrix){
+  const oaMap = oaByHibrido();
+  const totalsByH = {};
+  matrix.forEach(r=>{
+    if(!totalsByH[r.hibrido]) totalsByH[r.hibrido] = { forecast:0, recibido:0 };
+    totalsByH[r.hibrido].forecast += r.forecast;
+    totalsByH[r.hibrido].recibido += r.recibido;
+  });
+  const rows = Object.entries(totalsByH).map(([h,v])=>{
+    const oa = oaMap[h] || 0;
+    const recOA = v.recibido + oa;
+    const brechaFinal = v.forecast - recOA;
+    let estado = 'ontrack', label = 'Cubierto';
+    if(brechaFinal > 0){ estado='under'; label='Falta pedir más'; }
+    else if(oa>0 && v.recibido<v.forecast){ estado='ontrack'; label='Cubierto con OA en camino'; }
+    return { hibrido:h, forecast:v.forecast, recibido:v.recibido, oa, recOA, brechaFinal, estado, label };
+  }).sort((a,b)=>b.forecast-a.forecast);
+
+  const tbody = document.getElementById('oa-tbody');
+  tbody.innerHTML = '';
+  rows.forEach(r=>{
+    const tr = document.createElement('tr');
+    const cls = r.brechaFinal>0?'neg':(r.brechaFinal<0?'pos':'');
+    tr.innerHTML = `<td>${r.hibrido}</td>
+      <td class="num">${Math.round(r.forecast).toLocaleString('es-AR')}</td>
+      <td class="num">${r.recibido.toLocaleString('es-AR')}</td>
+      <td class="num">${r.oa>0?'+':''}${Math.round(r.oa).toLocaleString('es-AR')}</td>
+      <td class="num">${Math.round(r.recOA).toLocaleString('es-AR')}</td>
+      <td class="num ${cls}">${r.brechaFinal>0?'-':''}${Math.abs(Math.round(r.brechaFinal)).toLocaleString('es-AR')}</td>
+      <td><span class="badge ${r.estado}">${r.label}</span></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function renderFcTable(matrix){
+  const sorted = [...matrix].sort((a,b)=>{
+    let av=a[fcSort.key], bv=b[fcSort.key];
+    if(typeof av === 'string'){
+      if(av<bv) return -1*fcSort.dir;
+      if(av>bv) return 1*fcSort.dir;
+      return 0;
+    }
+    return (av-bv)*fcSort.dir;
+  });
+  const tbody = document.getElementById('fc-tbody');
+  tbody.innerHTML = '';
+  const estadoLabel = { under:'Falta traer', over:'Por encima', ontrack:'En línea' };
+  sorted.forEach(r=>{
+    const tr = document.createElement('tr');
+    const deltaCls = r.delta<0?'neg':(r.delta>0?'pos':'');
+    tr.innerHTML = `<td>${r.sucursal}</td><td>${r.hibrido}</td>
+      <td class="num">${Math.round(r.forecast).toLocaleString('es-AR')}</td>
+      <td class="num">${r.recibido.toLocaleString('es-AR')}</td>
+      <td class="num ${deltaCls}">${r.delta>0?'+':''}${Math.round(r.delta).toLocaleString('es-AR')}</td>
+      <td class="num">${r.forecast>0 ? Math.round(r.pct)+'%' : '—'}</td>
+      <td><span class="badge ${r.estado}">${estadoLabel[r.estado]}</span></td>`;
+    tbody.appendChild(tr);
+  });
+  document.getElementById('fc-rowcount').textContent = sorted.length + ' combinaciones sucursal × híbrido';
+}
+
+document.querySelectorAll('#tab-forecast thead th').forEach(th=>{
+  th.addEventListener('click', ()=>{
+    const key = th.dataset.key;
+    if(fcSort.key===key){ fcSort.dir *= -1; } else { fcSort.key=key; fcSort.dir=1; }
+    document.querySelectorAll('#tab-forecast thead th .arrow').forEach(a=>a.textContent='');
+    th.querySelector('.arrow').textContent = fcSort.dir===1?'▲':'▼';
+    renderForecastTab();
+  });
+});
+
+function renderForecastTab(){
+  const matrix = applyFcFilters(buildMatrix());
+  renderFcKPIs(matrix);
+  renderFcCallout(matrix);
+  renderFcCompareChart(matrix, 'sucursal', 'fc-chart-sucursal', false);
+  renderFcCompareChart(matrix, 'hibrido', 'fc-chart-hibrido', true);
+  renderFcTable(matrix);
+  renderOaTable(matrix);
+}
+renderForecastTab();
+
+// ============================================================
+// TAB 3: VENTAS VS STOCK
+// ============================================================
+let vtFilters = { sucursal:'' };
+let vtSort = { key:'stock', dir:1 };
+
+fillSelect('vt-f-sucursal', unique(SALES,'sucursal'));
+document.getElementById('vt-f-sucursal').addEventListener('change', e=>{
+  vtFilters.sucursal = e.target.value;
+  renderVentasTab();
+});
+document.getElementById('vt-reset').addEventListener('click', ()=>{
+  vtFilters = { sucursal:'' };
+  document.getElementById('vt-f-sucursal').value = '';
+  renderVentasTab();
+});
+
+function buildVentasMatrix(){
+  const recMap = recibidoBySucursalHibrido();
+  const fcMap = {};
+  FORECAST.forEach(f=>{ fcMap[f.sucursal+'|'+f.hibrido] = f.forecast; });
+
+  return SALES.map(s=>{
+    const key = s.sucursal+'|'+s.hibrido;
+    const forecast = fcMap[key] || 0;
+    const recibido = recMap[key] || 0;
+    const vendido = s.vendido;
+    const stock = recibido - vendido;
+    const pctForecast = forecast>0 ? (vendido/forecast*100) : (vendido>0?999:0);
+    const bolsasATraer = Math.max(0, forecast - recibido);
+    let estado = 'ok';
+    if(stock <= 0) estado = 'stockout';
+    else if(forecast>0 && pctForecast >= 85) estado = 'demanda_alta';
+    return {
+      sucursal:s.sucursal, hibrido:s.hibrido, forecast, recibido,
+      facturado:s.facturado, pendiente:s.pendiente, vendido,
+      stock, pctForecast, bolsasATraer, estado
+    };
+  });
+}
+
+function applyVtFilters(matrix){
+  return matrix.filter(r=> !vtFilters.sucursal || r.sucursal===vtFilters.sucursal);
+}
+
+function renderVtKPIs(matrix){
+  const totalVendido = matrix.reduce((s,r)=>s+r.vendido,0);
+  const totalFacturado = matrix.reduce((s,r)=>s+r.facturado,0);
+  const totalPendiente = matrix.reduce((s,r)=>s+r.pendiente,0);
+  const totalForecast = matrix.reduce((s,r)=>s+r.forecast,0);
+  const totalStock = matrix.reduce((s,r)=>s+r.stock,0);
+  const pctForecast = totalForecast>0 ? (totalVendido/totalForecast*100) : 0;
+  const stockoutCount = matrix.filter(r=>r.estado==='stockout').length;
+  const oaMap = oaByHibrido();
+  const hibridosInFilter = new Set(matrix.map(r=>r.hibrido));
+  const totalOA = [...hibridosInFilter].reduce((s,h)=>s+(oaMap[h]||0),0);
+
+  const kpis = document.getElementById('vt-kpis');
+  kpis.innerHTML = '';
+  const cards = [
+    { label:'Vendido a la fecha', value: totalVendido.toLocaleString('es-AR'), unit:'bolsas', foot: Math.round(totalFacturado).toLocaleString('es-AR')+' facturadas + '+Math.round(totalPendiente).toLocaleString('es-AR')+' pend. de facturar', alert:false },
+    { label:'% del forecast vendido', value: Math.round(pctForecast)+'%', unit:'', foot: pctForecast>=85 ? 'demanda cerca de agotar lo planificado' : 'dentro de lo esperado para la campaña', alert: pctForecast>=85 },
+    { label:'Stock disponible', value: totalStock.toLocaleString('es-AR'), unit:'bolsas', foot:'recibido menos vendido, todas las combinaciones', alert: totalStock<0 },
+    { label:'Combinaciones en quiebre', value: stockoutCount, unit:'de '+matrix.length, foot: stockoutCount ? 'vendieron más de lo que llegó físicamente' : 'ninguna combinación en quiebre', alert: stockoutCount>0 },
+    { label:'OA en camino (sin asignar)', value: Math.round(totalOA).toLocaleString('es-AR'), unit:'bolsas', foot:'pedidos a Corteva, a nivel compañía · ver detalle en Forecast vs Recibido', alert:false },
+  ];
+  cards.forEach(c=>{
+    const div = document.createElement('div');
+    div.className = 'kpi' + (c.alert?' alert':'');
+    div.innerHTML = `<div class="label">${c.label}</div><div class="value">${c.value}<small>${c.unit}</small></div><div class="foot">${c.foot}</div>`;
+    kpis.appendChild(div);
+  });
+}
+
+function renderVtCallout(matrix){
+  const el = document.getElementById('vt-callout');
+  const stockouts = matrix.filter(r=>r.estado==='stockout' && r.vendido>0).sort((a,b)=>a.stock-b.stock);
+  if(!stockouts.length){ el.innerHTML=''; return; }
+  const shown = stockouts.slice(0,6);
+  const parts = shown
+    .map(r=>`${r.sucursal} ${r.hibrido} (stock ${r.stock.toLocaleString('es-AR')})`)
+    .join('; ');
+  const extra = stockouts.length > shown.length ? ` y ${stockouts.length-shown.length} combinación${stockouts.length-shown.length>1?'es':''} más — ver tabla` : '';
+  el.innerHTML = `<div class="callout"><b>Sin stock físico para cubrir lo vendido (${stockouts.length} combinaciones):</b> ${parts}${extra}.</div>`;
+}
+
+function renderVtCompareChart(matrix){
+  const totals = {};
+  matrix.forEach(r=>{
+    if(!totals[r.sucursal]) totals[r.sucursal] = { forecast:0, vendido:0 };
+    totals[r.sucursal].forecast += r.forecast;
+    totals[r.sucursal].vendido += r.vendido;
+  });
+  const entries = Object.entries(totals).sort((a,b)=>b[1].forecast-a[1].forecast);
+  const el = document.getElementById('vt-chart-sucursal');
+  el.innerHTML = '';
+  if(!entries.length){ el.innerHTML='<div class="empty-state">Sin datos en este filtro</div>'; return; }
+  const max = Math.max(1, ...entries.map(e=>Math.max(e[1].forecast,e[1].vendido)));
+  entries.forEach(([name, v])=>{
+    const pct = v.forecast>0 ? (v.vendido/v.forecast*100) : (v.vendido>0?999:0);
+    const barPct = Math.min(100, Math.max(2, Math.round(v.vendido/max*100)));
+    const markPct = Math.min(100, Math.round(v.forecast/max*100));
+    // color driven by whether any combo within this sucursal is in stockout
+    const stockoutHere = matrix.some(r=>r.sucursal===name && r.estado==='stockout' && r.vendido>0);
+    let cls = 'ontrack';
+    if(stockoutHere) cls='under';
+    else if(pct>=85) cls='under';
+    else cls='over';
+    const row = document.createElement('div');
+    row.className = 'cmprow';
+    row.innerHTML = `<div class="name">${name}</div>
+      <div class="track">
+        <div class="fill ${cls}" style="width:${barPct}%"></div>
+        <div class="fc-mark" style="left:${markPct}%"></div>
+      </div>
+      <div class="pct">${Math.round(pct)}%<small>${v.vendido.toLocaleString('es-AR')} / ${Math.round(v.forecast).toLocaleString('es-AR')}</small></div>`;
+    el.appendChild(row);
+  });
+}
+
+function renderVtStockChart(matrix){
+  const totals = {};
+  matrix.forEach(r=>{ totals[r.hibrido] = (totals[r.hibrido]||0) + r.stock; });
+  const entries = Object.entries(totals).sort((a,b)=>b[1]-a[1]);
+  const el = document.getElementById('vt-chart-stock');
+  el.innerHTML = '';
+  if(!entries.length){ el.innerHTML='<div class="empty-state">Sin datos en este filtro</div>'; return; }
+  const max = Math.max(1, ...entries.map(e=>Math.abs(e[1])));
+  entries.forEach(([name,val])=>{
+    const pct = Math.max(2, Math.round(Math.abs(val)/max*100));
+    const row = document.createElement('div');
+    row.className = 'barrow';
+    row.innerHTML = `<div class="name">${name}</div>
+      <div class="track"><div class="fill ${val<0?'zero':''}" style="width:${pct}%"></div></div>
+      <div class="val">${val.toLocaleString('es-AR')}</div>`;
+    el.appendChild(row);
+  });
+}
+
+function renderVtTable(matrix){
+  const sorted = [...matrix].sort((a,b)=>{
+    let av=a[vtSort.key], bv=b[vtSort.key];
+    if(typeof av === 'string'){
+      if(av<bv) return -1*vtSort.dir;
+      if(av>bv) return 1*vtSort.dir;
+      return 0;
+    }
+    return (av-bv)*vtSort.dir;
+  });
+  const tbody = document.getElementById('vt-tbody');
+  tbody.innerHTML = '';
+  const estadoLabel = { stockout:'Reponer', demanda_alta:'Demanda alta', ok:'Cobertura ok' };
+  sorted.forEach(r=>{
+    const tr = document.createElement('tr');
+    const stockCls = r.stock<0?'neg':(r.stock>0?'pos':'');
+    tr.innerHTML = `<td>${r.sucursal}</td><td>${r.hibrido}</td>
+      <td class="num">${Math.round(r.forecast).toLocaleString('es-AR')}</td>
+      <td class="num">${r.recibido.toLocaleString('es-AR')}</td>
+      <td class="num">${Math.round(r.facturado).toLocaleString('es-AR')}</td>
+      <td class="num">${Math.round(r.pendiente).toLocaleString('es-AR')}</td>
+      <td class="num">${Math.round(r.vendido).toLocaleString('es-AR')}</td>
+      <td class="num ${stockCls}">${r.stock.toLocaleString('es-AR')}</td>
+      <td class="num">${r.forecast>0 ? Math.round(r.pctForecast)+'%' : '—'}</td>
+      <td><span class="badge ${r.estado==='stockout'?'under':(r.estado==='demanda_alta'?'ontrack':'over')}">${estadoLabel[r.estado]}</span></td>`;
+    tbody.appendChild(tr);
+  });
+  document.getElementById('vt-rowcount').textContent = sorted.length + ' combinaciones sucursal × híbrido';
+}
+
+document.querySelectorAll('#vt-detail-table thead th').forEach(th=>{
+  th.addEventListener('click', ()=>{
+    const key = th.dataset.key;
+    if(vtSort.key===key){ vtSort.dir *= -1; } else { vtSort.key=key; vtSort.dir=1; }
+    document.querySelectorAll('#vt-detail-table thead th .arrow').forEach(a=>a.textContent='');
+    th.querySelector('.arrow').textContent = vtSort.dir===1?'▲':'▼';
+    renderVentasTab();
+  });
+});
+
+let hsSort = { key:'faltaTraer', dir:-1 };
+
+function buildHibridoSummary(){
+  const fcByH = {};
+  FORECAST.forEach(f=>{ fcByH[f.hibrido] = (fcByH[f.hibrido]||0) + f.forecast; });
+  const recByH = {};
+  RAW.forEach(r=>{ recByH[r.hibrido] = (recByH[r.hibrido]||0) + r.cantidad; });
+  const oaByH = oaByHibrido();
+  const ventaByH = {};
+  SALES.forEach(s=>{ ventaByH[s.hibrido] = (ventaByH[s.hibrido]||0) + s.vendido; });
+
+  const hibridos = [...new Set([...Object.keys(fcByH), ...Object.keys(recByH)])];
+  return hibridos.map(h=>{
+    const forecast = fcByH[h] || 0;
+    const recibido = recByH[h] || 0;
+    const oa = oaByH[h] || 0;
+    const recibidoOA = recibido + oa;
+    const vendido = ventaByH[h] || 0;
+    const stock = recibido - vendido;
+    const faltaTraer = Math.max(0, forecast - recibidoOA);
+    let estado = 'ok', label = 'Cubierto';
+    if(faltaTraer > 0){ estado='traer'; label='Traer más'; }
+    else if(stock < 0){ estado='alerta'; label='Vendido > recibido'; }
+    return { hibrido:h, forecast, recibido, oa, recibidoOA, vendido, stock, faltaTraer, estado, label };
+  });
+}
+
+function renderHibridoSummary(){
+  const rows = buildHibridoSummary();
+  const sorted = [...rows].sort((a,b)=>{
+    let av=a[hsSort.key], bv=b[hsSort.key];
+    if(typeof av === 'string'){
+      if(av<bv) return -1*hsSort.dir;
+      if(av>bv) return 1*hsSort.dir;
+      return 0;
+    }
+    return (av-bv)*hsSort.dir;
+  });
+  const tbody = document.getElementById('hs-tbody');
+  tbody.innerHTML = '';
+  const badgeCls = { traer:'under', alerta:'ontrack', ok:'over' };
+  sorted.forEach(r=>{
+    const tr = document.createElement('tr');
+    const stockCls = r.stock<0?'neg':(r.stock>0?'pos':'');
+    const faltaCls = r.faltaTraer>0?'neg':'';
+    tr.innerHTML = `<td>${r.hibrido}</td>
+      <td class="num">${Math.round(r.forecast).toLocaleString('es-AR')}</td>
+      <td class="num">${r.recibido.toLocaleString('es-AR')}</td>
+      <td class="num">${r.oa>0?'+':''}${Math.round(r.oa).toLocaleString('es-AR')}</td>
+      <td class="num">${Math.round(r.recibidoOA).toLocaleString('es-AR')}</td>
+      <td class="num">${Math.round(r.vendido).toLocaleString('es-AR')}</td>
+      <td class="num ${stockCls}">${r.stock.toLocaleString('es-AR')}</td>
+      <td class="num ${faltaCls}">${r.faltaTraer>0 ? Math.round(r.faltaTraer).toLocaleString('es-AR') : '—'}</td>
+      <td><span class="badge ${badgeCls[r.estado]}">${r.label}</span></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+document.querySelectorAll('#hs-table thead th').forEach(th=>{
+  th.addEventListener('click', ()=>{
+    const key = th.dataset.key;
+    if(hsSort.key===key){ hsSort.dir *= -1; } else { hsSort.key=key; hsSort.dir=-1; }
+    document.querySelectorAll('#hs-table thead th .arrow').forEach(a=>a.textContent='');
+    th.querySelector('.arrow').textContent = hsSort.dir===1?'▲':'▼';
+    renderHibridoSummary();
+  });
+});
+
+function renderVentasTab(){
+  const matrix = applyVtFilters(buildVentasMatrix());
+  renderVtKPIs(matrix);
+  renderVtCallout(matrix);
+  renderHibridoSummary();
+  renderVtCompareChart(matrix);
+  renderVtStockChart(matrix);
+  renderVtTable(matrix);
+}
+renderVentasTab();
+
+// ============================================================
+// TAB 4: OBJETIVO 2026
+// ============================================================
+let obSort = { key:'brecha', dir:1 };
+
+function buildObjetivoMatrix(){
+  return OBJETIVO.map(o=>{
+    const pctObjetivo = o.objetivo>0 ? (o.forecastActual/o.objetivo*100) : 0;
+    let estado='ok', label='A menos del 5%';
+    const faltaPct = 100 - pctObjetivo;
+    if(faltaPct > 20){ estado='rojo'; label='Falta >20%'; }
+    else if(faltaPct > 5){ estado='amarillo'; label='Falta 5–20%'; }
+    else { estado='ok'; label = faltaPct<=0 ? 'Objetivo cumplido' : 'A menos del 5%'; }
+    return { ...o, pctObjetivo, faltaPct, estado, label };
+  });
+}
+
+function renderObKPIs(matrix){
+  const totalObjetivo = matrix.reduce((s,r)=>s+r.objetivo,0);
+  const totalForecast = matrix.reduce((s,r)=>s+r.forecastActual,0);
+  const totalVentas2025 = matrix.reduce((s,r)=>s+r.ventas2025,0);
+  const brecha = totalForecast - totalObjetivo;
+  const pct = totalObjetivo>0 ? (totalForecast/totalObjetivo*100) : 0;
+  const vs2025 = totalForecast - totalVentas2025;
+
+  const kpis = document.getElementById('ob-kpis');
+  kpis.innerHTML = '';
+  const cards = [
+    { label:'Objetivo 2026', value: totalObjetivo.toLocaleString('es-AR'), unit:'bolsas', foot:'suma de las 5 sucursales', alert:false },
+    { label:'Forecast actual', value: totalForecast.toLocaleString('es-AR'), unit:'bolsas', foot: Math.round(pct)+'% del objetivo', alert: pct<90 },
+    { label:'Brecha vs. objetivo', value: (brecha>=0?'+':'')+brecha.toLocaleString('es-AR'), unit:'bolsas', foot: brecha<0 ? 'falta forecastear/vender para llegar' : 'objetivo cubierto', alert: brecha<0 },
+    { label:'Vs. ventas 2025', value: (vs2025>=0?'+':'')+vs2025.toLocaleString('es-AR'), unit:'bolsas', foot: vs2025>=0 ? 'por encima de la campaña anterior' : 'por debajo de la campaña anterior', alert: vs2025<0 },
+  ];
+  cards.forEach(c=>{
+    const div = document.createElement('div');
+    div.className = 'kpi' + (c.alert?' alert':'');
+    div.innerHTML = `<div class="label">${c.label}</div><div class="value">${c.value}<small>${c.unit}</small></div><div class="foot">${c.foot}</div>`;
+    kpis.appendChild(div);
+  });
+}
+
+function renderObChart(matrix){
+  const el = document.getElementById('ob-chart');
+  el.innerHTML = '';
+  const entries = [...matrix].sort((a,b)=>b.objetivo-a.objetivo);
+  const max = Math.max(1, ...entries.map(r=>Math.max(r.objetivo, r.forecastActual)));
+  entries.forEach(r=>{
+    const barPct = Math.min(100, Math.max(2, Math.round(r.forecastActual/max*100)));
+    const markPct = Math.min(100, Math.round(r.objetivo/max*100));
+    let cls = 'ontrack';
+    if(r.estado==='rojo') cls='under';
+    else if(r.estado==='ok') cls='over';
+    const row = document.createElement('div');
+    row.className = 'cmprow';
+    row.innerHTML = `<div class="name">${r.sucursal}</div>
+      <div class="track">
+        <div class="fill ${cls}" style="width:${barPct}%"></div>
+        <div class="fc-mark" style="left:${markPct}%"></div>
+      </div>
+      <div class="pct">${Math.round(r.pctObjetivo)}%<small>${r.forecastActual.toLocaleString('es-AR')} / ${r.objetivo.toLocaleString('es-AR')}</small></div>`;
+    el.appendChild(row);
+  });
+}
+
+function renderObTable(matrix){
+  const sorted = [...matrix].sort((a,b)=>{
+    let av=a[obSort.key], bv=b[obSort.key];
+    if(typeof av === 'string'){
+      if(av<bv) return -1*obSort.dir;
+      if(av>bv) return 1*obSort.dir;
+      return 0;
+    }
+    return (av-bv)*obSort.dir;
+  });
+  const tbody = document.getElementById('ob-tbody');
+  tbody.innerHTML = '';
+  const badgeCls = { rojo:'under', amarillo:'ontrack', ok:'over' };
+  sorted.forEach(r=>{
+    const tr = document.createElement('tr');
+    const brechaCls = r.brecha<0?'neg':(r.brecha>0?'pos':'');
+    const vs25Cls = r.vs2025<0?'neg':(r.vs2025>0?'pos':'');
+    tr.innerHTML = `<td>${r.sucursal}</td>
+      <td class="num">${r.objetivo.toLocaleString('es-AR')}</td>
+      <td class="num">${r.forecastActual.toLocaleString('es-AR')}</td>
+      <td class="num">${Math.round(r.pctObjetivo)}%</td>
+      <td class="num">${r.ventas2025.toLocaleString('es-AR')}</td>
+      <td class="num ${brechaCls}">${r.brecha>0?'+':''}${r.brecha.toLocaleString('es-AR')}</td>
+      <td class="num ${vs25Cls}">${r.vs2025>0?'+':''}${r.vs2025.toLocaleString('es-AR')}</td>
+      <td><span class="badge ${badgeCls[r.estado]}">${r.label}</span></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+document.querySelectorAll('#ob-table thead th').forEach(th=>{
+  th.addEventListener('click', ()=>{
+    const key = th.dataset.key;
+    if(obSort.key===key){ obSort.dir *= -1; } else { obSort.key=key; obSort.dir=1; }
+    document.querySelectorAll('#ob-table thead th .arrow').forEach(a=>a.textContent='');
+    th.querySelector('.arrow').textContent = obSort.dir===1?'▲':'▼';
+    renderObjetivoTab();
+  });
+});
+
+function renderObjetivoTab(){
+  const matrix = buildObjetivoMatrix();
+  renderObKPIs(matrix);
+  renderObChart(matrix);
+  renderObTable(matrix);
+}
+renderObjetivoTab();
+</script>
+</body>
+</html>
